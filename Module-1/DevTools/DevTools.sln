@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomStyleCop", "CustomStyleCop\CustomStyleCop.csproj", "{B2952C64-C887-44C7-ACC7-926C663A2110}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomStyleCop.Tests", "CustomStyleCop.Tests\CustomStyleCop.Tests.csproj", "{C8517D65-DDE4-4A14-9152-0AD2ECD0CBFA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2952C64-C887-44C7-ACC7-926C663A2110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2952C64-C887-44C7-ACC7-926C663A2110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2952C64-C887-44C7-ACC7-926C663A2110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2952C64-C887-44C7-ACC7-926C663A2110}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8517D65-DDE4-4A14-9152-0AD2ECD0CBFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8517D65-DDE4-4A14-9152-0AD2ECD0CBFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8517D65-DDE4-4A14-9152-0AD2ECD0CBFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8517D65-DDE4-4A14-9152-0AD2ECD0CBFA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C35E5CD3-369A-4D4A-A130-5CD9DE480E55}
+	EndGlobalSection
+EndGlobal

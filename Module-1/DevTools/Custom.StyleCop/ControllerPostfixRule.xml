@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SourceAnalyzer Name="CustomRules">
+  <Decsription>
+    Custom c# style rules
+  </Decsription>
+  <Rules>
+    <Rule Name="ControllerPostfixRule" CheckId="ACR1000">
+      <Context>Controller name must ended to '...Controller'</Context>
+      <Decription>Controller name must ended to '...Controller'</Decription>
+    </Rule>
+  </Rules>
+</SourceAnalyzer>
