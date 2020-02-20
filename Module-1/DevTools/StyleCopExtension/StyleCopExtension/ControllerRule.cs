@@ -29,7 +29,7 @@ namespace CustomStyleCop
 
         private bool VisitClass(CsElement element, CsElement parentElement, object context)
         {
-            if (!(element is Class elClass)) return true;
+            if (!(element is Class elClass)) return false;
 
             if (elClass.BaseClass != nameof(Controller))
             {
@@ -38,16 +38,16 @@ namespace CustomStyleCop
                 if (elClass.Attributes.All(x => x.Text != nameof(AuthorizeAttribute))) elClass.WalkElement(VisitMethod);
             }
 
-            return false;
+            return true;
         }
 
         private bool VisitMethod(CsElement element, CsElement parentElement, object context)
         {
             if (!(element is Method elMethod)) return false;
-            if (element.Attributes.All(x => x.Text != nameof(AuthorizeAttribute)))
+            if (elMethod.Attributes.All(x => x.Text != nameof(AuthorizeAttribute)))
                 AddViolation(elMethod, AuthorizeAttributeRule);
 
-            return false;
+            return true;
         }
     }
 }
