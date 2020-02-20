@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SourceAnalyzer Name="Custom StyleCop Rules">
+  <Decsription>
+    Custom c# style rules
+  </Decsription>
+  <Rules>
+    <Rule Name="ControllerPostfixRule" CheckId="ACR1000">
+      <Context>Controller name must ended to '...Controller'</Context>
+      <Decription>Controller name must ended to '...Controller'</Decription>
+    </Rule>
+    <Rule Name="AuthorizeAttributeRule" CheckId="ACR1001">
+      <Context>Controller class should be marked AuthorizeAttribute, or all his public methods!</Context>
+      <Decription>Controller class should be marked AuthorizeAttribute, or all his public methods!</Decription>
+    </Rule>
+
+    <Rule Name="EntitiesClassOnlyPublicRule" CheckId="ACR1002">
+      <Context>Controller class should be marked AuthorizeAttribute, or all his public methods!</Context>
+      <Decription>Controller class should be marked AuthorizeAttribute, or all his public methods!</Decription>
+    </Rule>
+    <Rule Name="EntitiesMarkedDataContractRule" CheckId="ACR1003">
+      <Context>Controller class should be marked AuthorizeAttribute, or all his public methods!</Context>
+      <Decription>Controller class should be marked AuthorizeAttribute, or all his public methods!</Decription>
+    </Rule>
+    <Rule Name="EntitiesContainsIdRule" CheckId="ACR1004">
+      <Context>Controller class should be marked AuthorizeAttribute, or all his public methods!</Context>
+      <Decription>Controller class should be marked AuthorizeAttribute, or all his public methods!</Decription>
+    </Rule>
+    <Rule Name="EntitiesContainsNameRule" CheckId="ACR1005">
+      <Context>Controller class should be marked AuthorizeAttribute, or all his public methods!</Context>
+      <Decription>Controller class should be marked AuthorizeAttribute, or all his public methods!</Decription>
+    </Rule>
+  </Rules>
+</SourceAnalyzer>
