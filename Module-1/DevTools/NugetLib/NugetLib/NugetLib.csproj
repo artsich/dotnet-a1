@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>NugetLib.By.Artsiom</Authors>
+    <Company>NugetLib.EPAM</Company>
+    <Description>Гыыы</Description>
+  </PropertyGroup>
+
+</Project>
