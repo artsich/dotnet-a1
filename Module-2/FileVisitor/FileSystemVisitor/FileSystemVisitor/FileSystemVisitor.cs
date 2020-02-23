@@ -7,10 +7,13 @@ using System.Runtime.CompilerServices;
 
 namespace FileSystemVisitor
 {
-    public class FileSystemVisitor
+	public class FileSystemVisitor
     {
-        private bool _stopSearch;
-        private FolderNode _rootNode;
+		class StopSearchException : Exception
+		{
+		}
+
+		private FolderNode _rootNode;
         private Predicate<FileSystemNode> _filterBy;
 
         public event EventHandler StartHandler;
@@ -75,81 +78,69 @@ namespace FileSystemVisitor
             };
 
             StartHandler?.Invoke(this, EventArgs.Empty);
-            FindNodesInFolder(_rootNode, rootDirInfo);
+
+			try
+			{
+	            FindNodesInFolder(_rootNode, rootDirInfo);
+			}
+			catch (StopSearchException) { }
+
             EndHandler?.Invoke(this, EventArgs.Empty);
         }
 
         private void FindNodesInFolder(FolderNode rootNode, DirectoryInfo rootInfo)
         {
-            if (_stopSearch)
-            {
-                return;
-            }
-
             var systemEntries = rootInfo.EnumerateFileSystemInfos();
             foreach (var entries in systemEntries)
             {
-                var fileSystemEvent = default(FileSystemNodeEvent);
-                var fileSystemNode = default(FileSystemNode);
+				var fsEvent = default(FileSystemNodeEvent);
 
                 switch (entries.Attributes)
                 {
                     case FileAttributes.Archive:
                         var fileInfo = (FileInfo)entries;
-                        fileSystemNode = new FileNode(
+                        var fileNode = new FileNode(
                             fileInfo.FullName,
                             fileInfo.Name,
                             fileInfo.Extension,
                             fileInfo.Length);
 
-                        fileSystemEvent = new FileNodeFindEvent((FileNode)fileSystemNode);
-                        FileFound?.Invoke(fileInfo, (FileNodeFindEvent)fileSystemEvent);
+						var fileEvent = new FileNodeFindEvent(fileNode);
 
-                        break;
+						FileFound?.Invoke(fileInfo, fileEvent);
+
+						if (fileEvent.ShouldBeAdd)
+						{
+							rootNode.Add(fileNode);
+						}
+						fsEvent = fileEvent;
+						break;
                     case FileAttributes.Directory:
-                        fileSystemNode = new FolderNode
+                        var folderNode = new FolderNode
                         {
                             Name = entries.Name,
                             Path = entries.FullName,
                             Parent = rootNode
                         };
 
-                        var fileNode = (FolderNode) fileSystemNode;
-                        fileSystemEvent = new FolderNodeFindEvent(fileNode);
-                        FolderFound?.Invoke(this, (FolderNodeFindEvent)fileSystemEvent);
+                        var folderEvent = new FolderNodeFindEvent(folderNode);
+                        FolderFound?.Invoke(this, folderEvent);
 
-                        if (fileSystemEvent.ShouldBeAdd)
+                        if (folderEvent.ShouldBeAdd)
                         {
-                            rootNode.Add(fileSystemNode);
-                            FindNodesInFolder(fileNode, (DirectoryInfo)entries);
+                            rootNode.Add(folderNode);
+                            FindNodesInFolder(folderNode, (DirectoryInfo)entries);
                         }
-                        else
-                        {
-                            //TODO: Ask George: do i need to add folder-files if isNeedToAdd-false ?
-                        }
+
+						fsEvent = folderEvent;
                         break;
                 }
 
-                if (fileSystemEvent.ShouldBeAdd)
-                {
-                    rootNode.Add(fileSystemNode);
-                }
-
-                if (fileSystemEvent.StopSearch)
-                {
-                    return;
-                }
+				if (fsEvent != null && fsEvent.StopSearch)
+				{
+					throw new StopSearchException();
+				}
             }
-
-        }
-        private void VisitFolderNode(FolderNode folder)
-        {
-
-        }
-
-        private void VisitFileNode(FileNode file)
-        {
-
         }
     }
 }
