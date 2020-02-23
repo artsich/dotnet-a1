@@ -8,7 +8,7 @@ namespace FileSystemVisitor
     {
         static void Main(string[] args)
         {
-            var fileVisitor = new FileSystemVisitor();
+            var fileVisitor = new FileSystemVisitor(x => true);
             fileVisitor.StartHandler += FileVisitorOnStartHandler;
             fileVisitor.EndHandler += FileVisitorOnEndHandler;
 
@@ -53,6 +53,7 @@ namespace FileSystemVisitor
         {
             throw new NotImplementedException();
         }
+
         private static void FileVisitorOnEndHandler(object sender, EventArgs e)
         {
             throw new NotImplementedException();
