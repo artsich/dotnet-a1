@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CoreHello": {
+      "commandName": "Project",
+      "commandLineArgs": "\"Artsiom\""
+    }
+  }
+}
