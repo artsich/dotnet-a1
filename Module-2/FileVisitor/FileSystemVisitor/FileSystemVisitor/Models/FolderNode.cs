@@ -18,17 +18,7 @@ namespace FileSystemVisitor.Models
 
         public IEnumerator<FileSystemNode> GetEnumerator()
         {
-            foreach (var child in _childrens)
-            {
-                yield return child;
-                
-                if (!(child is FolderNode folderNode)) continue;
-
-                foreach (var node in folderNode)
-                {
-                    yield return node;
-                }
-            }
+            return _childrens.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -1,15 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FileSystemVisitor.Core;
+﻿using FileSystemVisitor.Core;
 using FileSystemVisitor.Models;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Runtime.CompilerServices;
 
 namespace FileSystemVisitor
 {
 	public class ConsoleApplication : BaseApplication
 	{
-		public ConsoleApplication(string root, Predicate<FileSystemNode> predicate = null) : base(root, predicate)
+        private const string FolderPath = @"D:\dotnet-a1\Module-2\FileVisitor\FileSystemVisitor\FileSystemVisitor\bin\Debug\netcoreapp3.1\Test";
+
+		public ConsoleApplication()
 		{
+            BuildTree(FolderPath, node => node.Name.Contains("e"));
 		}
 
 		protected override void FileVisitorOnStartHandler(object sender, EventArgs e)
@@ -20,14 +24,12 @@ namespace FileSystemVisitor
 		protected override void FileVisitorOnEndHandler(object sender, EventArgs e)
 		{
 			Console.WriteLine("End processing..");
-			Console.WriteLine("FS structure");
+			Console.WriteLine("FS structure:");
 			PrintFileSystem(base.FolderNode);
 		}
 
-		private static void PrintFileSystem(FolderNode folderNode, int shiftLevel = 0)
-		{
-			string shift = string.Join('\t', new char[shiftLevel]);
-
+		private static void PrintFileSystem(FolderNode folderNode, string shift = "")
+        {
 			foreach (var item in folderNode)
 			{
 				switch (item)
@@ -36,8 +38,8 @@ namespace FileSystemVisitor
 						Console.WriteLine($"{shift}{file.Name}");
 						break;
 					case FolderNode folder:
-						Console.WriteLine($"-{shift}{folder.Name}");
-						PrintFileSystem(folder, shiftLevel + 2);
+						Console.WriteLine($"{shift}-{folder.Name}");
+						PrintFileSystem(folder, shift + '\t');
 						break;
 				}
 			}

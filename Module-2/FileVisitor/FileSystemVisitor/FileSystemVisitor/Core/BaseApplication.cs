@@ -9,9 +9,9 @@ namespace FileSystemVisitor.Core
 
 		protected FolderNode FolderNode => _fileVisitor.RootNode;
 
-		protected BaseApplication(string root, Predicate<FileSystemNode> predicate)
+		protected BaseApplication()
 		{
-			_fileVisitor = new FileSystemVisitor(predicate);
+			_fileVisitor = new FileSystemVisitor();
 			_fileVisitor.StartHandler += FileVisitorOnStartHandler;
 			_fileVisitor.EndHandler += FileVisitorOnEndHandler;
 			
@@ -20,9 +20,12 @@ namespace FileSystemVisitor.Core
 			
 			_fileVisitor.FilteredFileFound += FileVisitorOnFilteredFileFound;
 			_fileVisitor.FilteredFolderFound += FileVisitorOnFilteredFolderFound;
-			
-			_fileVisitor.Start(root);
 		}
+
+        protected void BuildTree(string root, Predicate<FileSystemNode> predicate)
+        {
+			_fileVisitor.Start(root, predicate);
+        }
 
 		protected virtual void FileVisitorOnFilteredFolderFound(object sender, Infrastructure.FolderNodeFindEvent e)
 		{

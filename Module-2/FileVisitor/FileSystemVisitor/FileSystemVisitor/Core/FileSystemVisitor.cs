@@ -3,6 +3,7 @@ using FileSystemVisitor.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Enumeration;
 
 namespace FileSystemVisitor.Core
 {
@@ -23,11 +24,6 @@ namespace FileSystemVisitor.Core
 
 		public event EventHandler<FileNodeFindEvent> FilteredFileFound;
 		public event EventHandler<FolderNodeFindEvent> FilteredFolderFound;
-
-		public FileSystemVisitor(Predicate<FileSystemNode> filterBy)
-		{
-			_filterBy = filterBy;
-		}
 
 		public IEnumerable<FileSystemNode> Filter(Predicate<FileSystemNode> predicate)
 		{
@@ -54,15 +50,17 @@ namespace FileSystemVisitor.Core
 						break;
 				}
 
-				if (ev != null && ev.StopSearch) break;
+				if (ev != null) continue;
+                if (ev.StopSearch) break;
 				if (!ev.ShouldBeAdd) continue;
 
 				yield return item;
 			}
 		}
 
-		public void Start(string root)
+		public void Start(string root, Predicate<FileSystemNode> filterBy)
 		{
+            _filterBy = filterBy;
 			SetUpTree(root);
 		}
 
@@ -102,41 +100,10 @@ namespace FileSystemVisitor.Core
 				switch (entries.Attributes)
 				{
 					case FileAttributes.Archive:
-						var fileInfo = (FileInfo)entries;
-						var fileNode = new FileNode(
-							fileInfo.FullName,
-							fileInfo.Name,
-							fileInfo.Extension,
-							fileInfo.Length);
-
-						var fileEvent = new FileNodeFindEvent(fileNode);
-
-						FileFound?.Invoke(fileInfo, fileEvent);
-
-						if (fileEvent.ShouldBeAdd)
-						{
-							rootNode.Add(fileNode);
-						}
-						fsEvent = fileEvent;
+						VisitFile(rootNode, (FileInfo)entries, ref fsEvent);
 						break;
 					case FileAttributes.Directory:
-						var folderNode = new FolderNode
-						{
-							Name = entries.Name,
-							Path = entries.FullName,
-							Parent = rootNode
-						};
-
-						var folderEvent = new FolderNodeFindEvent(folderNode);
-						FolderFound?.Invoke(this, folderEvent);
-
-						if (folderEvent.ShouldBeAdd)
-						{
-							rootNode.Add(folderNode);
-							FindNodesInFolder(folderNode, (DirectoryInfo)entries);
-						}
-
-						fsEvent = folderEvent;
+						VisitFolder(rootNode, (DirectoryInfo)entries, ref fsEvent);
 						break;
 				}
 
@@ -146,5 +113,51 @@ namespace FileSystemVisitor.Core
 				}
 			}
 		}
+
+        private void VisitFile(FolderNode rootNode, FileInfo fileInfo, ref FileSystemNodeEvent ev)
+        {
+            var fileNode = new FileNode(
+                fileInfo.FullName,
+                fileInfo.Name,
+                fileInfo.Extension,
+                fileInfo.Length);
+
+            var isValid = _filterBy?.Invoke(fileNode) ?? true;
+			if (!isValid) return;
+
+            var fileEvent = new FileNodeFindEvent(fileNode);
+            FileFound?.Invoke(fileNode, fileEvent);
+
+            if (fileEvent.ShouldBeAdd)
+            {
+                rootNode.Add(fileNode);
+            }
+
+			ev = fileEvent;
+        }
+
+        private void VisitFolder(FolderNode rootNode, DirectoryInfo dirInfo, ref FileSystemNodeEvent ev)
+        {
+            var folderNode = new FolderNode
+            {
+                Name = dirInfo.Name,
+                Path = dirInfo.FullName,
+                Parent = rootNode
+            };
+
+            var isValid = _filterBy?.Invoke(folderNode) ?? true;
+            if (!isValid) return;
+
+			var folderEvent = new FolderNodeFindEvent(folderNode);
+            FolderFound?.Invoke(this, folderEvent);
+
+            if (folderEvent.ShouldBeAdd)
+            {
+                rootNode?.Add(folderNode);
+                FindNodesInFolder(folderNode, dirInfo);
+            }
+
+            ev = folderEvent;
+        }
 	}
 }
