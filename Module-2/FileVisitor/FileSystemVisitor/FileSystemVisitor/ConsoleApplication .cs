@@ -1,19 +1,16 @@
 ﻿using FileSystemVisitor.Core;
 using FileSystemVisitor.Models;
 using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Runtime.CompilerServices;
 
 namespace FileSystemVisitor
 {
 	public class ConsoleApplication : BaseApplication
 	{
-        private const string FolderPath = @"D:\dotnet-a1\Module-2\FileVisitor\FileSystemVisitor\FileSystemVisitor\bin\Debug\netcoreapp3.1\Test";
+		private const string FolderPath = @"D:\dotnet-a1\Module-2\FileVisitor\FileSystemVisitor\FileSystemVisitor\bin\Debug\netcoreapp3.1\Test";
 
 		public ConsoleApplication()
 		{
-            BuildTree(FolderPath, node => node.Name.Contains("e"));
+			BuildTree(FolderPath, node => node.Name.Contains("e"));
 		}
 
 		protected override void FileVisitorOnStartHandler(object sender, EventArgs e)
@@ -29,7 +26,7 @@ namespace FileSystemVisitor
 		}
 
 		private static void PrintFileSystem(FolderNode folderNode, string shift = "")
-        {
+		{
 			foreach (var item in folderNode)
 			{
 				switch (item)
