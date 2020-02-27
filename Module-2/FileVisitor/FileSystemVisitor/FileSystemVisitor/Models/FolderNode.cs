@@ -16,6 +16,13 @@ namespace FileSystemVisitor.Models
 
         public override long Size => _childrens.Sum(n => n.Size);
 
+        public FolderNode(FolderNode parent, string path, string name)
+        {
+            Name = name;
+            Path = path;
+            Parent = parent;
+        }
+
         public IEnumerator<FileSystemNode> GetEnumerator()
         {
             return _childrens.GetEnumerator();

@@ -1,31 +1,34 @@
 ﻿using FileSystemVisitor.Models;
 using System;
+using System.Collections.Generic;
 
 namespace FileSystemVisitor.Core
 {
 	public abstract class BaseApplication
 	{
-		private FileSystemVisitor _fileVisitor;
+		protected FileSystemVisitor FileVisitor { get; private set;}
 
-		protected FolderNode FolderNode => _fileVisitor.RootNode;
+		protected FolderNode FolderNode => FileVisitor.RootNode;
 
 		protected BaseApplication()
 		{
-			_fileVisitor = new FileSystemVisitor();
-			_fileVisitor.StartHandler += FileVisitorOnStartHandler;
-			_fileVisitor.EndHandler += FileVisitorOnEndHandler;
-			
-			_fileVisitor.FileFound += FileVisitorOnFileFound;
-			_fileVisitor.FolderFound += FileVisitorOnFolderFound;
-			
-			_fileVisitor.FilteredFileFound += FileVisitorOnFilteredFileFound;
-			_fileVisitor.FilteredFolderFound += FileVisitorOnFilteredFolderFound;
+			FileVisitor = new FileSystemVisitor();
+			FileVisitor.StartHandler += FileVisitorOnStartHandler;
+			FileVisitor.EndHandler += FileVisitorOnEndHandler;
+
+			FileVisitor.FileFound += FileVisitorOnFileFound;
+			FileVisitor.FolderFound += FileVisitorOnFolderFound;
+
+			FileVisitor.FilteredFileFound += FileVisitorOnFilteredFileFound;
+			FileVisitor.FilteredFolderFound += FileVisitorOnFilteredFolderFound;
 		}
 
         protected void BuildTree(string root, Predicate<FileSystemNode> predicate)
         {
-			_fileVisitor.Start(root, predicate);
+			FileVisitor.Start(root, predicate);
         }
+
+		protected IEnumerable<FileSystemNode> GetItems(Predicate<FileSystemNode> pr) => FileVisitor.FilterBy(pr);
 
 		protected virtual void FileVisitorOnFilteredFolderFound(object sender, Infrastructure.FolderNodeFindEvent e)
 		{

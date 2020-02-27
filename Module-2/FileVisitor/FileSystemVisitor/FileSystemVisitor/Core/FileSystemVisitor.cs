@@ -4,17 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Enumeration;
+using System.Linq;
 
 namespace FileSystemVisitor.Core
 {
 	public class FileSystemVisitor
 	{
-		class StopSearchException : Exception
-		{
-		}
-
 		public FolderNode RootNode { get; private set; }
 		private Predicate<FileSystemNode> _filterBy;
+
+		private bool _searchIsStopped;
 
 		public event EventHandler StartHandler;
 		public event EventHandler EndHandler;
@@ -25,36 +24,41 @@ namespace FileSystemVisitor.Core
 		public event EventHandler<FileNodeFindEvent> FilteredFileFound;
 		public event EventHandler<FolderNodeFindEvent> FilteredFolderFound;
 
-		public IEnumerable<FileSystemNode> Filter(Predicate<FileSystemNode> predicate)
+		public IEnumerable<FileSystemNode> FilterBy(Predicate<FileSystemNode> predicate)
 		{
-			if (predicate == null)
+			yield return RootNode;
+			var iter = Dfs(RootNode, predicate);
+			foreach(var item in iter)
 			{
-				throw new ArgumentNullException(nameof(predicate));
+				yield return item;
 			}
+		}
 
-			foreach (var item in RootNode)
+		private IEnumerable<FileSystemNode> Dfs(FolderNode root, Predicate<FileSystemNode> predicate)
+		{
+			foreach(var node in root)
 			{
-				if (!predicate(item)) continue;
-
-				var ev = default(FileSystemNodeEvent);
-
-				switch (item)
+				switch (node)
 				{
-					case FileNode fileNode:
-						ev = new FileNodeFindEvent(fileNode);
-						FilteredFileFound?.Invoke(this, (FileNodeFindEvent)ev);
+					case FileNode file:
+						if (predicate(file))
+						{
+							yield return file;
+						}
 						break;
-					case FolderNode folderNode:
-						ev = new FolderNodeFindEvent(folderNode);
-						FilteredFolderFound?.Invoke(this, (FolderNodeFindEvent)ev);
+					case FolderNode folder:
+						var childResult = Dfs(folder, predicate);
+
+						if (predicate(folder)) yield return folder;
+						var child = childResult.FirstOrDefault();
+						if (child != null)
+						{
+							yield return folder;
+							yield return child;
+						}
+
 						break;
 				}
-
-				if (ev != null) continue;
-                if (ev.StopSearch) break;
-				if (!ev.ShouldBeAdd) continue;
-
-				yield return item;
 			}
 		}
 
@@ -73,91 +77,103 @@ namespace FileSystemVisitor.Core
 
 			var rootDirInfo = new DirectoryInfo(root);
 
-			RootNode = new FolderNode()
-			{
-				Name = rootDirInfo.Name,
-				Path = rootDirInfo.FullName,
-			};
-
 			StartHandler?.Invoke(this, EventArgs.Empty);
-
-			try
-			{
-				FindNodesInFolder(RootNode, rootDirInfo);
-			}
-			catch (StopSearchException) { }
-
+			_searchIsStopped = false;
+			VisitFolder(rootDirInfo, null);
+			_searchIsStopped = true;
 			EndHandler?.Invoke(this, EventArgs.Empty);
 		}
 
-		private void FindNodesInFolder(FolderNode rootNode, DirectoryInfo rootInfo)
+		private bool VisitFileSystemInfo(FolderNode rootFolder, FileSystemInfo info)
 		{
-			var systemEntries = rootInfo.EnumerateFileSystemInfos();
-			foreach (var entries in systemEntries)
+			switch(info.Attributes)
 			{
-				var fsEvent = default(FileSystemNodeEvent);
-
-				switch (entries.Attributes)
-				{
-					case FileAttributes.Archive:
-						VisitFile(rootNode, (FileInfo)entries, ref fsEvent);
-						break;
-					case FileAttributes.Directory:
-						VisitFolder(rootNode, (DirectoryInfo)entries, ref fsEvent);
-						break;
-				}
-
-				if (fsEvent != null && fsEvent.StopSearch)
-				{
-					throw new StopSearchException();
-				}
+				case FileAttributes.Archive:
+					return VisitFile((FileInfo)info, rootFolder);
+				case FileAttributes.Directory:
+					return VisitFolder((DirectoryInfo)info, rootFolder);
 			}
+
+			return true;
 		}
 
-        private void VisitFile(FolderNode rootNode, FileInfo fileInfo, ref FileSystemNodeEvent ev)
-        {
-            var fileNode = new FileNode(
-                fileInfo.FullName,
-                fileInfo.Name,
-                fileInfo.Extension,
-                fileInfo.Length);
+		private bool VisitFile(FileInfo fileInfo, FolderNode rootNode)
+		{
+			var file = Map(fileInfo, rootNode);
+			var filterResult = _filterBy == null ? true : _filterBy.Invoke(file);
 
-            var isValid = _filterBy?.Invoke(fileNode) ?? true;
-			if (!isValid) return;
+			if (filterResult)
+			{
+				var fEvent = new FileNodeFindEvent(file);
+				FileFound?.Invoke(this, fEvent);
+				ProcessEvent(fEvent);
 
-            var fileEvent = new FileNodeFindEvent(fileNode);
-            FileFound?.Invoke(fileNode, fileEvent);
+				if (fEvent.ShouldBeAdd)
+				{
+					rootNode.Add(file);
+					return true;
+				}
+			}
 
-            if (fileEvent.ShouldBeAdd)
-            {
-                rootNode.Add(fileNode);
-            }
+			return false;
+		}
 
-			ev = fileEvent;
-        }
+		private bool VisitFolder(DirectoryInfo dirInfo, FolderNode rootNode = null)
+		{
+			var folder = Map(dirInfo, rootNode);
 
-        private void VisitFolder(FolderNode rootNode, DirectoryInfo dirInfo, ref FileSystemNodeEvent ev)
-        {
-            var folderNode = new FolderNode
-            {
-                Name = dirInfo.Name,
-                Path = dirInfo.FullName,
-                Parent = rootNode
-            };
+			if (rootNode == null)
+			{
+				RootNode = folder;
+			}
 
-            var isValid = _filterBy?.Invoke(folderNode) ?? true;
-            if (!isValid) return;
+			var childFilterResult = false;
+			foreach (var item in dirInfo.EnumerateFileSystemInfos())
+			{
+				var validChild = VisitFileSystemInfo(folder, item);
+				childFilterResult = childFilterResult || validChild;
+			}
 
-			var folderEvent = new FolderNodeFindEvent(folderNode);
-            FolderFound?.Invoke(this, folderEvent);
+			var filterResult = _filterBy == null ? true : _filterBy.Invoke(folder);
+			if (filterResult || childFilterResult)
+			{
+				var fEvent = new FolderNodeFindEvent(folder);
+				FolderFound?.Invoke(this, fEvent);
+				ProcessEvent(fEvent);
 
-            if (folderEvent.ShouldBeAdd)
-            {
-                rootNode?.Add(folderNode);
-                FindNodesInFolder(folderNode, dirInfo);
-            }
+				if(fEvent.ShouldBeAdd)
+				{
+					rootNode?.Add(folder);
+					return true;
+				}
+			}
 
-            ev = folderEvent;
-        }
+			return false;
+		}
+
+		private void ProcessEvent(FileSystemNodeEvent _event)
+		{
+			_searchIsStopped = _event.StopSearch;
+		}
+
+		private FileNode Map(FileInfo fileInfo, FolderNode rootNode)
+		{
+			return new FileNode (
+				rootNode,
+				fileInfo.FullName,
+				fileInfo.Name,
+				fileInfo.Extension,
+				fileInfo.Length
+			);
+		}
+
+		private FolderNode Map(DirectoryInfo dir, FolderNode rootNode)
+		{
+			return new FolderNode (
+				rootNode,
+				dir.FullName,
+				dir.Name
+			);
+		}
 	}
 }
