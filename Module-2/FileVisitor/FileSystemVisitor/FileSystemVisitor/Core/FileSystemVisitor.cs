@@ -1,16 +1,15 @@
 ﻿using FileSystemVisitor.Infrastructure;
 using FileSystemVisitor.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.IO.Enumeration;
-using System.Linq;
 
 namespace FileSystemVisitor.Core
 {
 	public class FileSystemVisitor
 	{
-		public FolderNode RootNode { get; private set; }
+		private FolderNode _rootNode;
+		public FolderNode RootNode => _rootNode;
+
 		private Predicate<FileSystemNode> _filterBy;
 
 		private bool _searchIsStopped;
@@ -21,51 +20,11 @@ namespace FileSystemVisitor.Core
 		public event EventHandler<FileNodeFindEvent> FileFound;
 		public event EventHandler<FolderNodeFindEvent> FolderFound;
 
-		public event EventHandler<FileNodeFindEvent> FilteredFileFound;
-		public event EventHandler<FolderNodeFindEvent> FilteredFolderFound;
-
-		public IEnumerable<FileSystemNode> FilterBy(Predicate<FileSystemNode> predicate)
+		public FolderNode Start(string root, Predicate<FileSystemNode> filterBy)
 		{
-			yield return RootNode;
-			var iter = Dfs(RootNode, predicate);
-			foreach(var item in iter)
-			{
-				yield return item;
-			}
-		}
-
-		private IEnumerable<FileSystemNode> Dfs(FolderNode root, Predicate<FileSystemNode> predicate)
-		{
-			foreach(var node in root)
-			{
-				switch (node)
-				{
-					case FileNode file:
-						if (predicate(file))
-						{
-							yield return file;
-						}
-						break;
-					case FolderNode folder:
-						var childResult = Dfs(folder, predicate);
-
-						if (predicate(folder)) yield return folder;
-						var child = childResult.FirstOrDefault();
-						if (child != null)
-						{
-							yield return folder;
-							yield return child;
-						}
-
-						break;
-				}
-			}
-		}
-
-		public void Start(string root, Predicate<FileSystemNode> filterBy)
-		{
-            _filterBy = filterBy;
+			_filterBy = filterBy;
 			SetUpTree(root);
+			return _rootNode;
 		}
 
 		private void SetUpTree(string root)
@@ -86,7 +45,12 @@ namespace FileSystemVisitor.Core
 
 		private bool VisitFileSystemInfo(FolderNode rootFolder, FileSystemInfo info)
 		{
-			switch(info.Attributes)
+			if (_searchIsStopped)
+			{
+				return false;
+			}
+
+			switch (info.Attributes)
 			{
 				case FileAttributes.Archive:
 					return VisitFile((FileInfo)info, rootFolder);
@@ -99,6 +63,11 @@ namespace FileSystemVisitor.Core
 
 		private bool VisitFile(FileInfo fileInfo, FolderNode rootNode)
 		{
+			if (_searchIsStopped)
+			{
+				return false;
+			}
+
 			var file = Map(fileInfo, rootNode);
 			var filterResult = _filterBy == null ? true : _filterBy.Invoke(file);
 
@@ -120,11 +89,16 @@ namespace FileSystemVisitor.Core
 
 		private bool VisitFolder(DirectoryInfo dirInfo, FolderNode rootNode = null)
 		{
+			if (_searchIsStopped)
+			{
+				return false;
+			}
+
 			var folder = Map(dirInfo, rootNode);
 
 			if (rootNode == null)
 			{
-				RootNode = folder;
+				_rootNode = folder;
 			}
 
 			var childFilterResult = false;
@@ -141,7 +115,7 @@ namespace FileSystemVisitor.Core
 				FolderFound?.Invoke(this, fEvent);
 				ProcessEvent(fEvent);
 
-				if(fEvent.ShouldBeAdd)
+				if (fEvent.ShouldBeAdd)
 				{
 					rootNode?.Add(folder);
 					return true;
@@ -158,7 +132,7 @@ namespace FileSystemVisitor.Core
 
 		private FileNode Map(FileInfo fileInfo, FolderNode rootNode)
 		{
-			return new FileNode (
+			return new FileNode(
 				rootNode,
 				fileInfo.FullName,
 				fileInfo.Name,
@@ -169,7 +143,7 @@ namespace FileSystemVisitor.Core
 
 		private FolderNode Map(DirectoryInfo dir, FolderNode rootNode)
 		{
-			return new FolderNode (
+			return new FolderNode(
 				rootNode,
 				dir.FullName,
 				dir.Name

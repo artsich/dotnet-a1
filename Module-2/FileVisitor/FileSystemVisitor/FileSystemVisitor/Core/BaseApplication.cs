@@ -7,20 +7,23 @@ namespace FileSystemVisitor.Core
 	public abstract class BaseApplication
 	{
 		protected FileSystemVisitor FileVisitor { get; private set;}
+		protected FileSystemNodeFilter FileFilter { get; private set; }
 
 		protected FolderNode FolderNode => FileVisitor.RootNode;
 
 		protected BaseApplication()
 		{
 			FileVisitor = new FileSystemVisitor();
+			FileFilter = new FileSystemNodeFilter();
+
 			FileVisitor.StartHandler += FileVisitorOnStartHandler;
 			FileVisitor.EndHandler += FileVisitorOnEndHandler;
 
 			FileVisitor.FileFound += FileVisitorOnFileFound;
 			FileVisitor.FolderFound += FileVisitorOnFolderFound;
 
-			FileVisitor.FilteredFileFound += FileVisitorOnFilteredFileFound;
-			FileVisitor.FilteredFolderFound += FileVisitorOnFilteredFolderFound;
+			FileFilter.FilteredFileFound += FileVisitorOnFilteredFileFound;
+			FileFilter.FilteredFolderFound += FileVisitorOnFilteredFolderFound;
 		}
 
         protected void BuildTree(string root, Predicate<FileSystemNode> predicate)
@@ -28,7 +31,7 @@ namespace FileSystemVisitor.Core
 			FileVisitor.Start(root, predicate);
         }
 
-		protected IEnumerable<FileSystemNode> GetItems(Predicate<FileSystemNode> pr) => FileVisitor.FilterBy(pr);
+		protected IEnumerable<FileSystemNode> GetItems(Predicate<FileSystemNode> pr) => FileFilter.FilterBy(FolderNode, pr);
 
 		protected virtual void FileVisitorOnFilteredFolderFound(object sender, Infrastructure.FolderNodeFindEvent e)
 		{
