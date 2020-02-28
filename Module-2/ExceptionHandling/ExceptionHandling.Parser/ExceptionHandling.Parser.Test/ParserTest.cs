@@ -32,6 +32,18 @@ namespace ExceptionHandling.Parser.Test
             Assert.AreEqual(result, expected);
         }
 
+        [Theory]
+        [TestCase("ggsgds")]
+        [TestCase("-sdasd")]
+        [TestCase("-0xsdasd")]
+        [TestCase("-0bsdasd")]
+        [TestCase("1283dsad2914")]
+
+        public void TryPase_CheckIncorrectParsing_ReturnFalse(string str)
+        {
+            bool result = ParserUtil.IntTryParse(str, out _);
+            Assert.IsFalse(result);
+        }
 
         [Theory]
         [TestCase("11111112111")]
@@ -52,6 +64,7 @@ namespace ExceptionHandling.Parser.Test
 
         [Theory]
         [TestCase("13adsad")]
+        [TestCase("13a-dsad")]
         [TestCase("0xlllkasd")]
         [TestCase("0bfff111")]
         public void IntParse_UnexcpectedSymbol_ReturnInvalidFormatException(string str)
