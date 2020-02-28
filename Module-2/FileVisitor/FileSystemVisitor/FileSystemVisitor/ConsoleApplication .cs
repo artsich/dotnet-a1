@@ -9,18 +9,23 @@ namespace FileSystemVisitor
 {
 	public class ConsoleApplication : BaseApplication
 	{
-		private const string FolderPath = @"D:\dotnet-a1\Module-2\FileVisitor\FileSystemVisitor\FileSystemVisitor\bin\Debug\netcoreapp3.1\Test";
-
-		public ConsoleApplication()
+		public ConsoleApplication(string[] args)
 		{
-			BuildTree(FolderPath, node =>
+			if (args.Length > 0 && args[0].Length > 0)
 			{
-				if (node is FileNode fileNode)
+				BuildTree(args[0], node =>
 				{
-					return true;// fileNode.Extension == ".java" || fileNode.Extension == ".py";
-				}
-				return true;
-			});
+					if (node is FileNode fileNode)
+					{
+						return fileNode.Extension == ".java" || fileNode.Extension == ".py";
+					}
+					return true;
+				});
+			}
+			else
+			{
+				Console.WriteLine("Run app like 'name.exe <path to folder>'");
+			}
 		}
 
 		protected override void FileVisitorOnStartHandler(object sender, EventArgs e)
@@ -33,18 +38,17 @@ namespace FileSystemVisitor
 			Console.WriteLine("End processing..");
 			Console.WriteLine("FS structure:");
 			PrintFileSystem(base.FolderNode);
-			
+
 			PrintSizeOfBaseFolder();
 
-			TestCase_1();
-			TestCase_2();
+			Script_1();
+			Script_2();
 		}
 
 		protected override void FileVisitorOnFolderFound(object sender, FolderNodeFindEvent e)
 		{
 			if (e.Folder.Name == "folder2")
 			{
-//				e.ShouldBeAdd = false;
 				e.StopSearch = true;
 			}
 		}
@@ -83,9 +87,9 @@ namespace FileSystemVisitor
 			}
 		}
 
-		private void TestCase_1()
+		private void Script_1()
 		{
-			TestCase("Filter by folder name := 'fol'", node =>
+			BaseScript("Filter by folder name := 'fol'", node =>
 			{
 				if (node is FolderNode folder)
 				{
@@ -96,9 +100,9 @@ namespace FileSystemVisitor
 			});
 		}
 
-		private void TestCase_2()
+		private void Script_2()
 		{
-			TestCase("Filter by file name := 'e'", node =>
+			BaseScript("Filter by file name := 'e'", node =>
 			{
 				if (node is FileNode file)
 				{
@@ -114,7 +118,7 @@ namespace FileSystemVisitor
 			Console.WriteLine($"The size of base folder {base.FolderNode.Size}");
 		}
 
-		private void TestCase(string name, Predicate<FileSystemNode> pred)
+		private void BaseScript(string name, Predicate<FileSystemNode> pred)
 		{
 			Console.WriteLine("------------");
 			Console.WriteLine(name);

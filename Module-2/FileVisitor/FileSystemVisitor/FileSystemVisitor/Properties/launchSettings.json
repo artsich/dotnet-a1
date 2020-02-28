@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FileSystemVisitor": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\dotnet-a1\\Module-2\\FileVisitor\\FileSystemVisitor\\FileSystemVisitor\\bin\\Debug\\netcoreapp3.1\\Test\""
+    }
+  }
+}

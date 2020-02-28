@@ -75,13 +75,9 @@ namespace FileSystemVisitor.Core
 			{
 				var fEvent = new FileNodeFindEvent(file);
 				FileFound?.Invoke(this, fEvent);
-				ProcessEvent(fEvent);
 
-				if (fEvent.ShouldBeAdd)
-				{
-					rootNode.Add(file);
-					return true;
-				}
+				ProcessEvent(rootNode, file, fEvent);
+				return fEvent.ShouldBeAdd;
 			}
 
 			return false;
@@ -105,6 +101,14 @@ namespace FileSystemVisitor.Core
 			foreach (var item in dirInfo.EnumerateFileSystemInfos())
 			{
 				var validChild = VisitFileSystemInfo(folder, item);
+				if (_searchIsStopped)
+				{
+					if (validChild)
+					{
+						rootNode?.Add(folder);
+					}
+					return false;
+				}
 				childFilterResult = childFilterResult || validChild;
 			}
 
@@ -113,20 +117,19 @@ namespace FileSystemVisitor.Core
 			{
 				var fEvent = new FolderNodeFindEvent(folder);
 				FolderFound?.Invoke(this, fEvent);
-				ProcessEvent(fEvent);
-
-				if (fEvent.ShouldBeAdd)
-				{
-					rootNode?.Add(folder);
-					return true;
-				}
+				ProcessEvent(rootNode, folder, fEvent);
+				return fEvent.ShouldBeAdd;
 			}
 
 			return false;
 		}
 
-		private void ProcessEvent(FileSystemNodeEvent _event)
+		private void ProcessEvent(FolderNode folder, FileSystemNode node, FileSystemNodeEvent _event)
 		{
+			if (_event.ShouldBeAdd)
+			{
+				folder?.Add(node);
+			}
 			_searchIsStopped = _event.StopSearch;
 		}
 
