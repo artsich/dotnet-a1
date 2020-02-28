@@ -1,10 +1,15 @@
-﻿using System;
+﻿using ExceptionHandling.Parser.Exceptions;
+using System;
 using System.Collections.Generic;
 
 namespace ExceptionHandling.Parser
 {
     public static class ParserUtil
     {
+        private static int MaxStringIntegerLength = int.MaxValue.ToString().Length;
+        private static int MaxStringIntegerHexLength = 8;
+        private static int MaxStringIntegerBinaryLength = 32;
+
         private static Dictionary<char, int> FromCharToBinaryDigitMap = new Dictionary<char, int>
         {
             {'0', 0},
@@ -48,18 +53,29 @@ namespace ExceptionHandling.Parser
             return boolResult;
         }
 
-        //todo: add minus
         public static int IntParse(string str)
         {
             if (str.Length == 0)
             {
-                throw new FormatException("length of str should be more than zeros");
+                throw new FormatException("Length of string should be more than zero....");
+            }
+
+            var isMinus = str[0] == '-';
+
+            if (isMinus)
+            {
+                if (str.Length < 2)
+                {
+                    throw new FormatException("After minus should be digits");
+                }
+
+                str = str.Substring(1, str.Length - 1);
             }
 
             var digitBase = 10;
             var digitMap = FromCharToDigitMap;
-
             var startIndex = 0;
+
             if (str.Length >= 2)
             {
                 if (str[0] == '0')
@@ -69,19 +85,34 @@ namespace ExceptionHandling.Parser
                         digitBase = 16;
                         startIndex = 2;
                         digitMap = FromCharToDigitMapHex;
+                        if (str.Length < 2 || str.Length - 2 > MaxStringIntegerHexLength)
+                        {
+                            throw new LenghtRangeException($"Hex length must be less than {MaxStringIntegerHexLength}");
+                        }
                     }
                     else if (str[1] == 'b')
                     {
                         digitBase = 2;
                         startIndex = 2;
                         digitMap = FromCharToBinaryDigitMap;
+
+                        if (str.Length < 2 || str.Length - 2 > MaxStringIntegerBinaryLength)
+                        {
+                            throw new LenghtRangeException($"Binary length must be less than {MaxStringIntegerBinaryLength}");
+                        }
                     }
                 }
             }
 
+            if (digitBase == 10 && str.Length > MaxStringIntegerLength)
+            {
+                throw new LenghtRangeException($"Decimal length must be less than {MaxStringIntegerLength}");
+
+            }
+
             if (startIndex >= str.Length)
             {
-                throw new FormatException("The format for HEX and Binary format after prefix should be digits.");
+                throw new FormatException("After prefix for HEX or Binary format must be digits..");
             }
 
             var result = 0;
@@ -96,7 +127,7 @@ namespace ExceptionHandling.Parser
                 result = (result * digitBase) + val;
             }
 
-            return result;
+            return isMinus ? -result : result;
         }
     }
 }
