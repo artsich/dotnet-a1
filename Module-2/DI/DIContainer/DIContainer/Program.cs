@@ -1,4 +1,8 @@
-﻿using DI;
+﻿using CoreProject.DataAccess.Context;
+using CoreProject.DataAccess.Repository;
+using CoreProject.Models;
+using CoreProject.Settings;
+using DI;
 
 namespace DIContainer
 {
@@ -7,7 +11,10 @@ namespace DIContainer
         static void Main(string[] args)
         {
             var builder = new DIBuilder().
-                AsStatic<Setting>();
+                AddStatic<MongoSetting>(sp => new MongoSetting() { DatabaseName = "", ConntectionString = "" }).
+                AddTransient<IContext, MongoContext>().
+                AddTransient<IRepository<User>, UserRepository>().
+                AddTransient<IRepository<Product>, ProductRepository>();
         }
     }
 }

@@ -4,7 +4,8 @@ namespace DI.Abstractions
 {
     public interface IContainerBuilder
     {
-        IContainerBuilder AddTransient<TService>();
+        IContainerBuilder AddTransient<TService>()
+            where TService : class;
 
         IContainerBuilder AddTransient<TService, TImplementation>()
             where TImplementation : class, TService;
@@ -13,7 +14,10 @@ namespace DI.Abstractions
             where TImplementation : class, TService;
 
         IContainerBuilder AddStatic<TService>();
-        
+
+        IContainerBuilder AddStatic<TService>(Func<IServiceProvider, TService> implementationFactory) 
+            where TService : class;
+
         IContainerBuilder AddStatic<TService, TImplementation>()
             where TImplementation : class, TService;
 

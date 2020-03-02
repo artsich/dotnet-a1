@@ -55,7 +55,23 @@ namespace DI
             return this;
         }
 
-        public IContainerBuilder AddTransient<TService>()
+        public IContainerBuilder AddStatic<TService>(Func<Abstractions.IServiceProvider, TService> implementationFactory) where TService : class
+        {
+            var serviceType = typeof(TService);
+            if (!_descriptorMap.TryGetValue(serviceType, out _))
+            {
+                _descriptorMap[serviceType] = new ServiceDescriptor(serviceType, ServiceLifetime.Singleton, serviceType, implementationFactory);
+            }
+            else
+            {
+                throw new NotImplementedException("TODO: CHECK IT EXCEPTION");
+            }
+
+            return this;
+        }
+
+        public IContainerBuilder AddTransient<TService>() 
+            where TService : class
         {
             var serviceType = typeof(TService);
             if (!_descriptorMap.TryGetValue(serviceType, out _))
