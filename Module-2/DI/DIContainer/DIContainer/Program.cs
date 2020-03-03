@@ -6,12 +6,12 @@ using DI;
 
 namespace DIContainer
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var builder = new DIBuilder().
-                AddStatic<MongoSetting>(sp => new MongoSetting() { DatabaseName = "", ConntectionString = "" }).
+                AddStatic(sp => new MongoSetting() { DatabaseName = "", ConntectionString = "" }).
                 AddTransient<IContext, MongoContext>().
                 AddTransient<IRepository<User>, UserRepository>().
                 AddTransient<IRepository<Product>, ProductRepository>();

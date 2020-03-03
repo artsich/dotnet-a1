@@ -42,7 +42,10 @@ namespace DI
 
         public Func<Abstractions.IServiceProvider, object> ImplementationFactory { get; }
 
+        private Abstractions.IServiceProvider _serviceProvider;
+
         public ServiceDescriptor(
+            Abstractions.IServiceProvider serviceProvider,
             Type implementatinType, 
             ServiceLifetime lifetime, 
             Type serviceType,
@@ -52,6 +55,7 @@ namespace DI
             Lifetime = lifetime;
             ServiceType = serviceType;
             ImplementationFactory = implementationFactory;
+            _serviceProvider = serviceProvider;
         }
     }
 }

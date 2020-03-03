@@ -8,12 +8,19 @@ namespace DI
     {
         private Dictionary<Type, ServiceDescriptor> _descriptorMap;
 
+        private Abstractions.IServiceProvider _serviceProvider;
+
+        public DIBuilder()
+        {
+            _serviceProvider = new DIContainer();
+        }
+
         public IContainerBuilder AddStatic<TService>()
         {
             var serviceType = typeof(TService);
             if (!_descriptorMap.TryGetValue(serviceType, out _))
             {
-                _descriptorMap[serviceType] = new ServiceDescriptor(serviceType, ServiceLifetime.Singleton, serviceType, null);
+                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, serviceType, null);
             }
             else
             {
@@ -29,7 +36,7 @@ namespace DI
             var serviceType = typeof(TService);
             if (!_descriptorMap.TryGetValue(serviceType, out _))
             {
-                _descriptorMap[serviceType] = new ServiceDescriptor(serviceType, ServiceLifetime.Singleton, typeof(TImplementation), null);
+                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, typeof(TImplementation), null);
             }
             else
             {
@@ -45,7 +52,7 @@ namespace DI
             var serviceType = typeof(TService);
             if (!_descriptorMap.TryGetValue(serviceType, out _))
             {
-                _descriptorMap[serviceType] = new ServiceDescriptor(serviceType, ServiceLifetime.Singleton, typeof(TImplementation), implementationFactory);
+                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, typeof(TImplementation), implementationFactory);
             }
             else
             {
@@ -60,7 +67,7 @@ namespace DI
             var serviceType = typeof(TService);
             if (!_descriptorMap.TryGetValue(serviceType, out _))
             {
-                _descriptorMap[serviceType] = new ServiceDescriptor(serviceType, ServiceLifetime.Singleton, serviceType, implementationFactory);
+                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, serviceType, implementationFactory);
             }
             else
             {
@@ -76,7 +83,7 @@ namespace DI
             var serviceType = typeof(TService);
             if (!_descriptorMap.TryGetValue(serviceType, out _))
             {
-                _descriptorMap[serviceType] = new ServiceDescriptor(serviceType, ServiceLifetime.Singleton, serviceType, null);
+                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton,  serviceType, null);
             }
             else
             {
@@ -92,7 +99,7 @@ namespace DI
             var serviceType = typeof(TService);
             if (!_descriptorMap.TryGetValue(serviceType, out _))
             {
-                _descriptorMap[serviceType] = new ServiceDescriptor(serviceType, ServiceLifetime.Singleton, typeof(TImplementation), null);
+                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, typeof(TImplementation), null);
             }
             else
             {
@@ -108,7 +115,7 @@ namespace DI
             var serviceType = typeof(TService);
             if (!_descriptorMap.TryGetValue(serviceType, out _))
             {
-                _descriptorMap[serviceType] = new ServiceDescriptor(serviceType, ServiceLifetime.Singleton, typeof(TImplementation), implementationFactory);
+                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, typeof(TImplementation), implementationFactory);
             }
             else
             {
@@ -120,7 +127,7 @@ namespace DI
 
         public Abstractions.IServiceProvider Build()
         {
-            return new DIContainer();
+            return _serviceProvider;
         }
     }
 }
