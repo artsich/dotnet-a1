@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DIContainer", "DIContainer\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreProject", "CoreProject\CoreProject.csproj", "{B3E62D33-522E-4656-8835-F9BE8BADC881}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Di.Impl", "Di.Impl\Di.Impl.csproj", "{C82D419D-B94F-4E88-90D0-A687F9D208E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Di", "Di.Impl\Di.csproj", "{C82D419D-B94F-4E88-90D0-A687F9D208E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
