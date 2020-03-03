@@ -2,6 +2,8 @@
 {
     public enum PhrasesEnum
     {
+		NOT_FOUND_FOLDER,
+		HELLO,
         TO,
         FROM,
         FILE_ADDED,

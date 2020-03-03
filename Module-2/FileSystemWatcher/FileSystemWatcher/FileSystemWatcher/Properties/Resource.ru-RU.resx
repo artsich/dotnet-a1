@@ -117,22 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FILE_ADDED" xml:space="preserve">
+    <value>Файл добавлен</value>
+  </data>
+  <data name="FILE_MOVED" xml:space="preserve">
+    <value>Файл перемещен</value>
+  </data>
   <data name="FROM" xml:space="preserve">
-    <value>from</value>
+    <value>из</value>
   </data>
-  <data name="ON_FILE_ADDED" xml:space="preserve">
-    <value>File was added</value>
+  <data name="HELLO" xml:space="preserve">
+    <value>Папки прослушиваюся, для завершения нажмите 'Q'.</value>
   </data>
-  <data name="ON_FILE_MOVED" xml:space="preserve">
-    <value>File was moved</value>
+  <data name="PATTERN_RESULT_FALSE" xml:space="preserve">
+    <value>Паттерн отработае неудачно</value>
   </data>
-  <data name="ON_PATTERN_RESULT_FALSE" xml:space="preserve">
-    <value>On pattern fail</value>
-  </data>
-  <data name="ON_PATTERN_RESULT_TRUE" xml:space="preserve">
-    <value>On pattern success</value>
+  <data name="PATTERN_RESULT_TRUE" xml:space="preserve">
+    <value>Паттерн отработал успешно</value>
   </data>
   <data name="TO" xml:space="preserve">
-    <value>to</value>
+    <value>в</value>
   </data>
 </root>

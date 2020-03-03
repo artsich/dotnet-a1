@@ -6,10 +6,12 @@ namespace FileSystemWatcher.Settings
     [JsonObject("AppSettings")]
     public class Setting
     {
-        [JsonProperty("Localization")]
-        public string Localization { get; set; }
+		public string DefaultPath { get; set; }
 
-        [JsonProperty("Rules")]
-        public IList<Rule> Rules { get; set; }
+		public string Localization { get; set; }
+
+		public string[] ListeningFolders { get; set; }
+
+        public Rule[] Rules { get; set; }
     }
 }

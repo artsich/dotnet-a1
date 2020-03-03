@@ -2,70 +2,94 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Text;
 
+//TODO: Maybe check on cycle in folder path????
 namespace FileSystemWatcher
 {
-    class Program
-    {
-        private readonly Setting _setting;
-        private readonly FileWatcher _fileWatcher;
-        private readonly IStringProvider _stringProvider;
+	class Program
+	{
+		private FileWatcher _fileWatcher;
+		private readonly Setting _setting;
+		private readonly IStringProvider _stringProvider;
 
-        private Program(Setting setting, IStringProvider stringProvider)
-        {
-            _setting = setting;
-            _stringProvider = stringProvider;
-            _fileWatcher = new FileWatcher(_setting.Rules);
+		private Program(Setting setting, IStringProvider stringProvider)
+		{
+			_setting = setting;
+			_stringProvider = stringProvider;
+		}
 
-            _fileWatcher.FileAdded += OnFileAdded;
-            _fileWatcher.FileMoved += OnFileMoved;
-            _fileWatcher.PatternMatchResult += OnPatternMatchResult;
-        }
+		private void Run()
+		{
+			using (_fileWatcher = new FileWatcher(_setting.DefaultPath, _setting.Rules))
+			{
+				_fileWatcher.FileAdded += OnFileAdded;
+				_fileWatcher.FileMoved += OnFileMoved;
+				_fileWatcher.PatternMatchResult += OnPatternMatchResult;
 
-        //TODO: Optimize this pattern;
-        private void OnFileMoved(object sender, Events.FileMovedEvent args)
-        {
-            var message = string.Format($"" +
-                $"{_stringProvider.GetString(PhrasesEnum.FILE_MOVED)} " +
-                $"{args.Name} " +
-                $"{_stringProvider.GetString(PhrasesEnum.FROM)} " +
-                $"{args.From} " +
-                $"{_stringProvider.GetString(PhrasesEnum.TO)}",
-                args.To
-            );
+				try
+				{
+					_fileWatcher.StartWatch(_setting.ListeningFolders);
+				}
+				catch (DirectoryNotFoundException e)
+				{
+					//TODO: Add new string to resources.
+					Console.WriteLine($"{e.Message}{_stringProvider.GetString(PhrasesEnum.NOT_FOUND_FOLDER)}");
+				}
 
-            Console.WriteLine(message);
-        }
+				Console.WriteLine(_stringProvider.GetString(PhrasesEnum.HELLO));
+				while (Console.Read() != 'q') ;
+			}
+		}
 
-        private void OnFileAdded(object sender, Events.FileAddedEvent args)
-        {
-            Console.WriteLine("On file added");
-        }
+		private void OnFileMoved(object sender, Events.FileMovedEvent args)
+		{
+			var builder = new StringBuilder();
+			builder.Append(_stringProvider.GetString(PhrasesEnum.FILE_MOVED));
+			builder.Append(" ");
+			builder.Append(args.Name);
+			builder.Append(" ");
+			builder.Append(_stringProvider.GetString(PhrasesEnum.FROM));
+			builder.Append(" ");
+			builder.Append(args.From);
+			builder.Append(" ");
+			builder.Append(_stringProvider.GetString(PhrasesEnum.TO));
+			builder.Append(" ");
+			builder.Append(args.To);
+			builder.Append(" ");
+			Console.WriteLine(builder.ToString());
+		}
 
-        private void OnPatternMatchResult(object sender, Events.PatternMatchEvent args)
-        {
-            Console.WriteLine("On pattern succes or fail");
-        }
+		private void OnFileAdded(object sender, Events.FileAddedEvent args)
+		{
+			Console.WriteLine("On file added");
+		}
 
-        static void Main(string[] args)
-        {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-            var appSettings = config.GetSection("AppSettings").Get<Setting>();
+		private void OnPatternMatchResult(object sender, Events.PatternMatchEvent args)
+		{
+			Console.WriteLine("On pattern succes or fail");
+		}
 
-            if (appSettings != null)
-            {
-                Console.WriteLine("Sorry but (appsetting.json) file not found!!");
-            }
-            else
-            {
-                new Program(
-                    appSettings,
-                    new ResourceStringProvider(appSettings.Localization)
-                );
-            }
-        }
-    }
+		static void Main(string[] args)
+		{
+			var config = new ConfigurationBuilder()
+				.SetBasePath(Directory.GetCurrentDirectory())
+				.AddJsonFile("appsettings.json")
+				.Build();
+			var appSettings = config.GetSection("AppSettings").Get<Setting>();
+
+			if (appSettings == null)
+			{
+				//TODO: MOVE TO RESOURCES
+				Console.WriteLine("Sorry but (appsetting.json) file not found!!");
+			}
+			else
+			{
+				new Program(
+					appSettings,
+					new ResourceStringProvider(appSettings.Localization)
+				).Run();
+			}
+		}
+	}
 }

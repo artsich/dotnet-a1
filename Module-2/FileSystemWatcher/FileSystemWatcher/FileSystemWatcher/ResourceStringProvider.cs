@@ -1,32 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Globalization;
+using System.Threading;
 
 namespace FileSystemWatcher
 {
-    public class ResourceStringProvider : IStringProvider
-    {
-        System.Resources.ResourceManager _resourceManager;
+	public class ResourceStringProvider : IStringProvider
+	{
+		System.Resources.ResourceManager _resourceManager;
 
-        public ResourceStringProvider(string localization)
-        {
-            switch(localization)
-            {
-                case "ru":
-                    _resourceManager = Properties.ResourcesRu.ResourceManager;
-                    break;
-                case "en":
-                    _resourceManager = Properties.ResourcesEn.ResourceManager;
-                    break;
-                default:
-                    _resourceManager = Properties.ResourcesEn.ResourceManager;
-                    break;
-            }
-        }
+		public ResourceStringProvider(string localization)
+		{
+			Thread.CurrentThread.CurrentUICulture = new CultureInfo(localization);
+			_resourceManager = Properties.Resource.ResourceManager;
+		}
 
-        public string GetString(PhrasesEnum phrases)
-        {
-            return _resourceManager.GetString(phrases.ToString());
-        }
-    }
+		public string GetString(PhrasesEnum phrases)
+		{
+			return _resourceManager.GetString(phrases.ToString());
+		}
+	}
 }

@@ -2,27 +2,13 @@
 
 namespace FileSystemWatcher
 {
-    [JsonObject("ModifyRule")]
-    public class ModifyRule
+	[JsonObject("Rule")]
+	public class Rule
     {
-        public bool IsOrderNumberAdd { get; }
+        public string DestinationPath { get; set; }
 
-        public bool IsDateAdded { get; set; }
-    }
+        public string Pattern { get; set; }
 
-    [JsonObject("Rule")]
-    public class Rule
-    {
-        [JsonProperty("Default path")]
-        public string DefaultPath { get; }
-
-        [JsonProperty("Destination path")]
-        public string DestinationPath { get; }
-
-        [JsonProperty("Pattern")]
-        public string Pattern { get; }
-
-        [JsonProperty("Modify Rule")]
-        public ModifyRule ModifyRule { get; }
-    }
+        public ModifyRule ModifyRule { get; set; }
+	}
 }

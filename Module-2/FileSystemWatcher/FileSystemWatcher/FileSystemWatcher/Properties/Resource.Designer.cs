@@ -22,14 +22,14 @@ namespace FileSystemWatcher.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ResourcesRu {
+    internal class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ResourcesRu() {
+        internal Resource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace FileSystemWatcher.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FileSystemWatcher.Properties.ResourcesRu", typeof(ResourcesRu).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FileSystemWatcher.Properties.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,56 +61,65 @@ namespace FileSystemWatcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to из.
+        ///   Looks up a localized string similar to File was added.
         /// </summary>
-        internal static string From {
+        internal static string FILE_ADDED {
             get {
-                return ResourceManager.GetString("From", resourceCulture);
+                return ResourceManager.GetString("FILE_ADDED", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Файл добавлен.
+        ///   Looks up a localized string similar to File was moved.
         /// </summary>
-        internal static string ON_FILE_ADDED {
+        internal static string FILE_MOVED {
             get {
-                return ResourceManager.GetString("ON_FILE_ADDED", resourceCulture);
+                return ResourceManager.GetString("FILE_MOVED", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Файл перемещен.
+        ///   Looks up a localized string similar to from.
         /// </summary>
-        internal static string ON_FILE_MOVED {
+        internal static string FROM {
             get {
-                return ResourceManager.GetString("ON_FILE_MOVED", resourceCulture);
+                return ResourceManager.GetString("FROM", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Паттерн отработал успешно.
+        ///   Looks up a localized string similar to The folders are listening, to exit click &apos;Q&apos;.
         /// </summary>
-        internal static string ON_PATTERN_RESULT_FALSE {
+        internal static string HELLO {
             get {
-                return ResourceManager.GetString("ON_PATTERN_RESULT_FALSE", resourceCulture);
+                return ResourceManager.GetString("HELLO", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Паттерн отработае неудачно.
+        ///   Looks up a localized string similar to On pattern fail.
         /// </summary>
-        internal static string ON_PATTERN_RESULT_TRUE {
+        internal static string PATTERN_RESULT_FALSE {
             get {
-                return ResourceManager.GetString("ON_PATTERN_RESULT_TRUE", resourceCulture);
+                return ResourceManager.GetString("PATTERN_RESULT_FALSE", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to в.
+        ///   Looks up a localized string similar to On pattern success.
         /// </summary>
-        internal static string To {
+        internal static string PATTERN_RESULT_TRUE {
             get {
-                return ResourceManager.GetString("To", resourceCulture);
+                return ResourceManager.GetString("PATTERN_RESULT_TRUE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to.
+        /// </summary>
+        internal static string TO {
+            get {
+                return ResourceManager.GetString("TO", resourceCulture);
             }
         }
     }
