@@ -1,5 +1,5 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace FileSystemWatcher.Settings
 {
@@ -8,5 +8,8 @@ namespace FileSystemWatcher.Settings
     {
         [JsonProperty("Localization")]
         public string Localization { get; set; }
+
+        [JsonProperty("Rules")]
+        public IList<Rule> Rules { get; set; }
     }
 }
