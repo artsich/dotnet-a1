@@ -79,10 +79,12 @@ namespace Di
         private void InjectToProperty(object obj)
         {
             var type = ImplementationType;
-            var injectingProperties = type.GetProperties().Where(pr => pr.GetCustomAttribute<ImportAttribute>() != null);
+            var props = type.GetProperties();
+            var injectingProperties = props.Where(pr => pr.GetCustomAttribute<InjectAttribute>() != null);
+
             foreach (var prop in injectingProperties)
             {
-                prop.SetValue(obj, _serviceProvider.GetService(prop.DeclaringType));
+                prop.SetValue(obj, _serviceProvider.GetService(prop.PropertyType));
             }
         }
     }

@@ -2,7 +2,7 @@
 
 namespace Di
 {
-    public class ImportAttribute : Attribute
+    public class InjectAttribute : Attribute
     {
     }
 }
