@@ -6,9 +6,9 @@ namespace Di
 {
     public class DIBuilder : IContainerBuilder
     {
-        private Dictionary<Type, AbstractServiceDescriptor> _descriptorMap;
-
         private DIContainer _serviceProvider;
+
+        private Dictionary<Type, AbstractServiceDescriptor> _descriptorMap;
 
         public DIBuilder()
         {
@@ -80,7 +80,7 @@ namespace Di
         public Abstractions.IServiceProvider Build()
         {
             var result = _serviceProvider;
-            //TODO: Need to think more time.
+            //TODO: Need to think about it.
             _descriptorMap = new Dictionary<Type, AbstractServiceDescriptor>();
             _serviceProvider = new DIContainer(_descriptorMap);
             return result;
