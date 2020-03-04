@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.Text;
 
-//TODO: Maybe check on cycle in folder path????
 namespace FileSystemWatcher
 {
 	class Program
@@ -33,8 +32,8 @@ namespace FileSystemWatcher
 				}
 				catch (DirectoryNotFoundException e)
 				{
-					//TODO: Add new string to resources.
-					Console.WriteLine($"{e.Message}{_stringProvider.GetString(PhrasesEnum.NOT_FOUND_FOLDER)}");
+					Console.WriteLine(PrepareMessage(PhrasesEnum.NOT_FOUND_FOLDER, e.Message));
+					return;
 				}
 
 				Console.WriteLine(_stringProvider.GetString(PhrasesEnum.HELLO));
@@ -44,30 +43,27 @@ namespace FileSystemWatcher
 
 		private void OnFileMoved(object sender, Events.FileMovedEvent args)
 		{
-			var builder = new StringBuilder();
-			builder.Append(_stringProvider.GetString(PhrasesEnum.FILE_MOVED));
-			builder.Append(" ");
-			builder.Append(args.Name);
-			builder.Append(" ");
-			builder.Append(_stringProvider.GetString(PhrasesEnum.FROM));
-			builder.Append(" ");
-			builder.Append(args.From);
-			builder.Append(" ");
-			builder.Append(_stringProvider.GetString(PhrasesEnum.TO));
-			builder.Append(" ");
-			builder.Append(args.To);
-			builder.Append(" ");
-			Console.WriteLine(builder.ToString());
+			Console.WriteLine(PrepareMessage(PhrasesEnum.FILE_MOVED, args.Name, args.From, args.To));
 		}
 
 		private void OnFileAdded(object sender, Events.FileAddedEvent args)
 		{
-			Console.WriteLine("On file added");
+			Console.WriteLine(PrepareMessage(PhrasesEnum.FILE_ADDED, args.FilePath, args.CreatedDate));
 		}
 
 		private void OnPatternMatchResult(object sender, Events.PatternMatchEvent args)
 		{
-			Console.WriteLine("On pattern succes or fail");
+			Console.WriteLine(PrepareMessage(
+				args.IsSuccess 
+				? PhrasesEnum.PATTERN_RESULT_TRUE 
+				: PhrasesEnum.PATTERN_RESULT_FALSE,
+				args.FileName));
+		}
+
+		private string PrepareMessage(PhrasesEnum phrase, params object[] args)
+		{
+			var format = _stringProvider.GetString(phrase);
+			return string.Format(format, args);
 		}
 
 		static void Main(string[] args)
@@ -77,17 +73,17 @@ namespace FileSystemWatcher
 				.AddJsonFile("appsettings.json")
 				.Build();
 			var appSettings = config.GetSection("AppSettings").Get<Setting>();
+			var stringProvider = new ResourceStringProvider(appSettings.Localization);
 
 			if (appSettings == null)
 			{
-				//TODO: MOVE TO RESOURCES
-				Console.WriteLine("Sorry but (appsetting.json) file not found!!");
+				Console.WriteLine(stringProvider.GetString(PhrasesEnum.APP_SETTING_NOT_FOUND));
 			}
 			else
 			{
 				new Program(
 					appSettings,
-					new ResourceStringProvider(appSettings.Localization)
+					stringProvider
 				).Run();
 			}
 		}

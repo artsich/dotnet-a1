@@ -24,11 +24,6 @@ namespace FileSystemWatcher
 		{
 			_rules = rules;
 			_defaultPath = defaultPath;
-
-			if (!Directory.Exists(_defaultPath))
-			{
-				Directory.CreateDirectory(_defaultPath);
-			}
 		}
 
 		public void StartWatch(string[] paths)
@@ -56,20 +51,22 @@ namespace FileSystemWatcher
 		{
 			if (e.ChangeType == WatcherChangeTypes.Created)
 			{
-				var matchedRule = CheckRuleForNameFile(e.Name);
-				string modifyedName = e.Name;
-				string destPath = _defaultPath;
+				var fileInfo = new FileInfo(e.FullPath);
+				FileAdded?.Invoke(this, new Events.FileAddedEvent(e.FullPath, fileInfo.LastWriteTimeUtc));
+
+				var matchedRule = CheckRuleForNameFile(fileInfo.Name);
+				string modifyedName = fileInfo.Name;
+				string destFolder = _defaultPath;
 
 				if (matchedRule != null)
 				{
-					modifyedName = ModifyNameIfNeeded(e.Name, matchedRule.ModifyRule);
-					destPath = matchedRule.DestinationPath;
+					var nameWithoudExt = Path.GetFileNameWithoutExtension(fileInfo.Name);
+					modifyedName = ModifyNameIfNeeded(nameWithoudExt, matchedRule.ModifyRule) + fileInfo.Extension;
+					destFolder = matchedRule.DestinationPath;
 				}
+				PatternMatchResult?.Invoke(this, new Events.PatternMatchEvent(fileInfo.Name, matchedRule));
 
-				var newFilePath = Path.Combine(destPath, modifyedName);
-				MoveFile(modifyedName, e.FullPath, newFilePath);
-
-				PatternMatchResult?.Invoke(this, new Events.PatternMatchEvent(matchedRule != null, newFilePath));
+				MoveFile(modifyedName, fileInfo.FullName, destFolder);
 			}
 		}
 
@@ -80,19 +77,25 @@ namespace FileSystemWatcher
 			var result = name;
 			if (rule.IsOrderNumberAdd)
 			{
-				result += _orderNumber++;
+				result = $"{_orderNumber++}_{result}";
 			}
 
 			if (rule.IsDateAdded)
 			{
-				result += DateTimeOffset.Now;
+				result += $"_{DateTime.Now.ToLongDateString()}";
 			}
 
 			return result;
 		}
 
-		private void MoveFile(string name, string from, string to)
+		private void MoveFile(string name, string from, string destFolder)
 		{
+			if (!Directory.Exists(destFolder))
+			{
+				Directory.CreateDirectory(destFolder);
+			}
+
+			var to = Path.Combine(destFolder, name);
 			File.Move(from, to, true);
 			FileMoved?.Invoke(this, new Events.FileMovedEvent(name, from, to));
 		}

@@ -2,14 +2,16 @@
 {
     public class PatternMatchEvent
     {
-        public bool IsSuccess { get; }
+        public bool IsSuccess => MatchedRule != null;
 
-        public string FileName { get; set; }
+        public string FileName { get; }
 
-        public PatternMatchEvent(bool isSuccess, string fileName)
+        public Rule MatchedRule { get;}
+
+        public PatternMatchEvent(string fileName, Rule matchedRule)
         {
-            IsSuccess = isSuccess;
             FileName = fileName;
+            MatchedRule = matchedRule;
         }
     }
 }

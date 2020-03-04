@@ -61,7 +61,16 @@ namespace FileSystemWatcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File was added.
+        ///   Looks up a localized string similar to Sorry but (appsetting.json) file not found!!.
+        /// </summary>
+        internal static string APP_SETTING_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("APP_SETTING_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File {0} was added at {1}.
         /// </summary>
         internal static string FILE_ADDED {
             get {
@@ -70,20 +79,11 @@ namespace FileSystemWatcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File was moved.
+        ///   Looks up a localized string similar to File {0} was from {1} to {2}.
         /// </summary>
         internal static string FILE_MOVED {
             get {
                 return ResourceManager.GetString("FILE_MOVED", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to from.
-        /// </summary>
-        internal static string FROM {
-            get {
-                return ResourceManager.GetString("FROM", resourceCulture);
             }
         }
         
@@ -97,7 +97,16 @@ namespace FileSystemWatcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to On pattern fail.
+        ///   Looks up a localized string similar to The folder {0} not found.
+        /// </summary>
+        internal static string NOT_FOUND_FOLDER {
+            get {
+                return ResourceManager.GetString("NOT_FOUND_FOLDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For file {0} rules not found.
         /// </summary>
         internal static string PATTERN_RESULT_FALSE {
             get {
@@ -106,20 +115,11 @@ namespace FileSystemWatcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to On pattern success.
+        ///   Looks up a localized string similar to For file {0} rule is found.
         /// </summary>
         internal static string PATTERN_RESULT_TRUE {
             get {
                 return ResourceManager.GetString("PATTERN_RESULT_TRUE", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to to.
-        /// </summary>
-        internal static string TO {
-            get {
-                return ResourceManager.GetString("TO", resourceCulture);
             }
         }
     }

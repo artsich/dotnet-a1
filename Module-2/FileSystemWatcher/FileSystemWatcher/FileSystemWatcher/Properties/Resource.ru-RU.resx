@@ -117,25 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="APP_SETTING_NOT_FOUND" xml:space="preserve">
+    <value>К сожаление запуск приложения не возможен изза отстутствия appsetting.json...</value>
+  </data>
   <data name="FILE_ADDED" xml:space="preserve">
-    <value>Файл добавлен</value>
+    <value>Файл {0} был добавлен в {1}</value>
   </data>
   <data name="FILE_MOVED" xml:space="preserve">
-    <value>Файл перемещен</value>
-  </data>
-  <data name="FROM" xml:space="preserve">
-    <value>из</value>
+    <value>Файл {0} бьл переимещен из {1} в {2}</value>
   </data>
   <data name="HELLO" xml:space="preserve">
     <value>Папки прослушиваюся, для завершения нажмите 'Q'.</value>
   </data>
+  <data name="NOT_FOUND_FOLDER" xml:space="preserve">
+    <value>Папка {0} не найдена</value>
+  </data>
   <data name="PATTERN_RESULT_FALSE" xml:space="preserve">
-    <value>Паттерн отработае неудачно</value>
+    <value>Паттерн отработае неудачно для файла {0}</value>
   </data>
   <data name="PATTERN_RESULT_TRUE" xml:space="preserve">
-    <value>Паттерн отработал успешно</value>
-  </data>
-  <data name="TO" xml:space="preserve">
-    <value>в</value>
+    <value>Паттерн отработал успешно для файла {0}</value>
   </data>
 </root>

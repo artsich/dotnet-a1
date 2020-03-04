@@ -117,25 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="APP_SETTING_NOT_FOUND" xml:space="preserve">
+    <value>Sorry but (appsetting.json) file not found!!</value>
+  </data>
   <data name="FILE_ADDED" xml:space="preserve">
-    <value>File was added</value>
+    <value>File {0} was added at {1}</value>
   </data>
   <data name="FILE_MOVED" xml:space="preserve">
-    <value>File was moved</value>
-  </data>
-  <data name="FROM" xml:space="preserve">
-    <value>from</value>
+    <value>File {0} was from {1} to {2}</value>
   </data>
   <data name="HELLO" xml:space="preserve">
     <value>The folders are listening, to exit click 'Q'</value>
   </data>
+  <data name="NOT_FOUND_FOLDER" xml:space="preserve">
+    <value>The folder {0} not found</value>
+  </data>
   <data name="PATTERN_RESULT_FALSE" xml:space="preserve">
-    <value>On pattern fail</value>
+    <value>For file {0} rules not found</value>
   </data>
   <data name="PATTERN_RESULT_TRUE" xml:space="preserve">
-    <value>On pattern success</value>
-  </data>
-  <data name="TO" xml:space="preserve">
-    <value>to</value>
+    <value>For file {0} rule is found</value>
   </data>
 </root>
