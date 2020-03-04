@@ -7,7 +7,7 @@ namespace Di
 {
     public abstract class AbstractServiceDescriptor
     {
-        public Type ImplementatinType { get; }
+        public Type ImplementationType { get; }
 
         public virtual object ImplementationInstance { get; }
 
@@ -19,11 +19,11 @@ namespace Di
 
         public AbstractServiceDescriptor(
             Abstractions.IServiceProvider serviceProvider,
-            Type implementatinType,
             Type serviceType,
+            Type implementatinType,
             Func<Abstractions.IServiceProvider, object> implementationFactory)
         {
-            ImplementatinType = implementatinType;
+            ImplementationType = implementatinType;
             ServiceType = serviceType;
             ImplementationFactory = implementationFactory;
             _serviceProvider = serviceProvider;
@@ -38,9 +38,10 @@ namespace Di
 
         private object InjectToCtor()
         {
-            var type = ImplementatinType;
+            var type = ImplementationType;
             object[] ctorParams = null;
-            var ctor = GetPrimaryCtor(type).FirstOrDefault(ct => ResolveDependency(ct, out ctorParams));
+            var ctors = GetPrimaryCtor(type);
+            var ctor = ctors.FirstOrDefault(ct => ResolveDependency(ct, out ctorParams));
             if (ctor != null)
             {
                 return ctor.Invoke(ctorParams);
@@ -49,8 +50,12 @@ namespace Di
             throw new Exception("Can't find corresponding constructor for this type");
         }
 
-        private IEnumerable<ConstructorInfo> GetPrimaryCtor(Type type) => 
-            type.GetConstructors(BindingFlags.Public).OrderBy(x => x.GetParameters().Length);
+        private ICollection<ConstructorInfo> GetPrimaryCtor(Type type)
+        {
+            var ctors = type.GetConstructors();
+            var sorted = ctors.OrderBy(x => x.GetParameters().Length).ToList();
+            return sorted;
+        }
 
         private bool ResolveDependency(ConstructorInfo ctorInfo, out object[] ctorParams)
         {
@@ -60,7 +65,7 @@ namespace Di
             {
                 try
                 {
-                    ctorParams[i] = _serviceProvider.GetSertice(ctorArgs[i].ParameterType);
+                    ctorParams[i] = _serviceProvider.GetService(ctorArgs[i].ParameterType);
                 }
                 catch (Exception)
                 {
@@ -73,11 +78,11 @@ namespace Di
 
         private void InjectToProperty(object obj)
         {
-            var type = ImplementatinType;
+            var type = ImplementationType;
             var injectingProperties = type.GetProperties().Where(pr => pr.GetCustomAttribute<ImportAttribute>() != null);
             foreach (var prop in injectingProperties)
             {
-                prop.SetValue(obj, _serviceProvider.GetSertice(prop.DeclaringType));
+                prop.SetValue(obj, _serviceProvider.GetService(prop.DeclaringType));
             }
         }
     }

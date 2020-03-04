@@ -17,10 +17,10 @@ namespace DIContainer
                 .AddTransient<IRepository<Product>, ProductRepository>()
                 .Build();
 
-            var setting = container.GetSertice<MongoSetting>();
-            var context = container.GetSertice<IContext>();
-            var repUser = container.GetSertice<IRepository<User>>();
-            var repProduct = container.GetSertice<IRepository<Product>>();
+            var setting = container.GetService<MongoSetting>();
+            var context = container.GetService<IContext>();
+            var repUser = container.GetService<IRepository<User>>();
+            var repProduct = container.GetService<IRepository<Product>>();
         }
     }
 }

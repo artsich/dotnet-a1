@@ -20,12 +20,12 @@ namespace Di
         }
 
         public TransientServiceDescriptor(Abstractions.IServiceProvider serviceProvider,
-                Type implementatinType,
                 Type serviceType,
+                Type implementatinType,
                 Func<Abstractions.IServiceProvider, object> implementationFactory
         ) : base(serviceProvider,
-                implementatinType,
                 serviceType,
+                implementatinType,
                 implementationFactory)
         {
         }

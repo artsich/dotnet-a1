@@ -13,21 +13,20 @@ namespace Di
             _descriptionMap = descriptionMap;
         }
 
-        public TService GetSertice<TService>()
+        public TService GetService<TService>()
             where TService : class
         {
-            var type = typeof(TService);
+            return GetService(typeof(TService)) as TService;
+        }
+
+        public object GetService(Type type) 
+        {
             if (_descriptionMap.TryGetValue(type, out var resultService))
             {
-                return resultService.ImplementationInstance as TService;
+                return resultService.ImplementationInstance;
             }
 
             throw new Exception("TOODSODOSAPODJKSADJSALKDJLSKJd;lkj");
-        }
-
-        public TService GetSertice<TService>(TService type) where TService : class
-        {
-            return GetSertice<TService>();
         }
     }
 }

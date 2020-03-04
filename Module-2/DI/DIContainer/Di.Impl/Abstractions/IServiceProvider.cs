@@ -1,11 +1,12 @@
-﻿namespace Di.Abstractions
+﻿using System;
+
+namespace Di.Abstractions
 {
     public interface IServiceProvider
     {
-        TService GetSertice<TService>() 
+        TService GetService<TService>()
             where TService : class;
 
-        TService GetSertice<TService>(TService type) 
-            where TService : class;
+        object GetService(Type type);
     }
 }
