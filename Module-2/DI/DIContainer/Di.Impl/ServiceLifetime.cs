@@ -1,4 +1,4 @@
-﻿namespace DI
+﻿namespace Di
 {
     public enum ServiceLifetime
     {

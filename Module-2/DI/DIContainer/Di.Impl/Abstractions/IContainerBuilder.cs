@@ -1,10 +1,13 @@
 ﻿using System;
 
-namespace DI.Abstractions
+namespace Di.Abstractions
 {
     public interface IContainerBuilder
     {
         IContainerBuilder AddTransient<TService>()
+            where TService : class;
+
+        IContainerBuilder AddTransient<TService>(Func<IServiceProvider, TService> implementationFactory)
             where TService : class;
 
         IContainerBuilder AddTransient<TService, TImplementation>()

@@ -2,7 +2,7 @@
 using CoreProject.DataAccess.Repository;
 using CoreProject.Models;
 using CoreProject.Settings;
-using DI;
+using Di;
 
 namespace DIContainer
 {
@@ -10,11 +10,17 @@ namespace DIContainer
     {
         public static void Main(string[] args)
         {
-            var builder = new DIBuilder().
-                AddStatic(sp => new MongoSetting() { DatabaseName = "", ConntectionString = "" }).
-                AddTransient<IContext, MongoContext>().
-                AddTransient<IRepository<User>, UserRepository>().
-                AddTransient<IRepository<Product>, ProductRepository>();
+            var container = new DIBuilder()
+                .AddStatic(sp => new MongoSetting() { DatabaseName = "BERRIES", ConntectionString = "www.google.com" })
+                .AddTransient<IContext, MongoContext>()
+                .AddTransient<IRepository<User>, UserRepository>()
+                .AddTransient<IRepository<Product>, ProductRepository>()
+                .Build();
+
+            var setting = container.GetSertice<MongoSetting>();
+            var context = container.GetSertice<IContext>();
+            var repUser = container.GetSertice<IRepository<User>>();
+            var repProduct = container.GetSertice<IRepository<Product>>();
         }
     }
 }

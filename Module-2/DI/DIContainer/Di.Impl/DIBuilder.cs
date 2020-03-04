@@ -1,32 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using DI.Abstractions;
+using Di.Abstractions;
 
-namespace DI
+namespace Di
 {
     public class DIBuilder : IContainerBuilder
     {
-        private Dictionary<Type, ServiceDescriptor> _descriptorMap;
+        private Dictionary<Type, AbstractServiceDescriptor> _descriptorMap;
 
-        private Abstractions.IServiceProvider _serviceProvider;
+        private DIContainer _serviceProvider;
 
         public DIBuilder()
         {
-            _serviceProvider = new DIContainer();
+            _descriptorMap = new Dictionary<Type, AbstractServiceDescriptor>();
+            _serviceProvider = new DIContainer(_descriptorMap);
         }
 
         public IContainerBuilder AddStatic<TService>()
         {
             var serviceType = typeof(TService);
-            if (!_descriptorMap.TryGetValue(serviceType, out _))
-            {
-                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, serviceType, null);
-            }
-            else
-            {
-                throw new NotImplementedException("TODO: CHECK IT EXCEPTION");
-            }
-
+            _descriptorMap[serviceType] = new StaticServiceDescriptor(_serviceProvider, serviceType, serviceType, null);
             return this;
         }
 
@@ -34,15 +27,7 @@ namespace DI
             where TImplementation : class, TService
         {
             var serviceType = typeof(TService);
-            if (!_descriptorMap.TryGetValue(serviceType, out _))
-            {
-                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, typeof(TImplementation), null);
-            }
-            else
-            {
-                throw new NotImplementedException("TODO: CHECK IT EXCEPTION");
-            }
-
+            _descriptorMap[serviceType] = new StaticServiceDescriptor(_serviceProvider, serviceType, typeof(TImplementation), null);
             return this;
         }
 
@@ -50,30 +35,14 @@ namespace DI
             where TImplementation : class, TService
         {
             var serviceType = typeof(TService);
-            if (!_descriptorMap.TryGetValue(serviceType, out _))
-            {
-                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, typeof(TImplementation), implementationFactory);
-            }
-            else
-            {
-                throw new NotImplementedException("TODO: CHECK IT EXCEPTION");
-            }
-
+            _descriptorMap[serviceType] = new StaticServiceDescriptor(_serviceProvider, serviceType, typeof(TImplementation), implementationFactory);
             return this;
         }
 
         public IContainerBuilder AddStatic<TService>(Func<Abstractions.IServiceProvider, TService> implementationFactory) where TService : class
         {
             var serviceType = typeof(TService);
-            if (!_descriptorMap.TryGetValue(serviceType, out _))
-            {
-                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, serviceType, implementationFactory);
-            }
-            else
-            {
-                throw new NotImplementedException("TODO: CHECK IT EXCEPTION");
-            }
-
+            _descriptorMap[serviceType] = new StaticServiceDescriptor(_serviceProvider, serviceType, serviceType, implementationFactory);
             return this;
         }
 
@@ -81,15 +50,7 @@ namespace DI
             where TService : class
         {
             var serviceType = typeof(TService);
-            if (!_descriptorMap.TryGetValue(serviceType, out _))
-            {
-                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton,  serviceType, null);
-            }
-            else
-            {
-                throw new NotImplementedException("TODO: CHECK IT EXCEPTION");
-            }
-
+            _descriptorMap[serviceType] = new TransientServiceDescriptor(_serviceProvider, serviceType, serviceType, null);
             return this;
         }
 
@@ -97,15 +58,7 @@ namespace DI
             where TImplementation : class, TService
         {
             var serviceType = typeof(TService);
-            if (!_descriptorMap.TryGetValue(serviceType, out _))
-            {
-                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, typeof(TImplementation), null);
-            }
-            else
-            {
-                throw new NotImplementedException("TODO: CHECK IT EXCEPTION");
-            }
-
+            _descriptorMap[serviceType] = new TransientServiceDescriptor(_serviceProvider, serviceType, typeof(TImplementation), null);
             return this;
         }
 
@@ -113,21 +66,24 @@ namespace DI
             where TImplementation : class, TService
         {
             var serviceType = typeof(TService);
-            if (!_descriptorMap.TryGetValue(serviceType, out _))
-            {
-                _descriptorMap[serviceType] = new ServiceDescriptor(_serviceProvider, serviceType, ServiceLifetime.Singleton, typeof(TImplementation), implementationFactory);
-            }
-            else
-            {
-                throw new NotImplementedException("TODO: CHECK IT EXCEPTION");
-            }
+            _descriptorMap[serviceType] = new TransientServiceDescriptor(_serviceProvider, serviceType, typeof(TImplementation), implementationFactory);
+            return this;
+        }
 
+        public IContainerBuilder AddTransient<TService>(Func<Abstractions.IServiceProvider, TService> implementationFactory) where TService : class
+        {
+            var serviceType = typeof(TService);
+            _descriptorMap[serviceType] = new TransientServiceDescriptor(_serviceProvider, serviceType, serviceType, implementationFactory);
             return this;
         }
 
         public Abstractions.IServiceProvider Build()
         {
-            return _serviceProvider;
+            var result = _serviceProvider;
+            //TODO: Need to think more time.
+            _descriptorMap = new Dictionary<Type, AbstractServiceDescriptor>();
+            _serviceProvider = new DIContainer(_descriptorMap);
+            return result;
         }
     }
 }
