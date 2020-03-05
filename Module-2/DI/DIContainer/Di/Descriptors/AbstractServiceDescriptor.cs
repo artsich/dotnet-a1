@@ -63,13 +63,14 @@ namespace Di
             ctorParams = new object[ctorArgs.Length];
             for (int i = 0; i < ctorParams.Length; ++i)
             {
-                try
+                var service = _serviceProvider.GetService(ctorArgs[i].ParameterType);
+                if (service != null)
                 {
-                    ctorParams[i] = _serviceProvider.GetService(ctorArgs[i].ParameterType);
+                    ctorParams[i] = service;
                 }
-                catch (Exception)
+                else
                 {
-                    return false;
+                    throw new Exception($"Can't resolve dependency for type: {ctorArgs[i].ParameterType}");
                 }
             }
 

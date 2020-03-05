@@ -10,7 +10,7 @@ namespace Di
             {
                 if (ImplementationFactory != null)
                 {
-                    return ImplementationFactory?.Invoke(_serviceProvider);
+                    return ImplementationFactory(_serviceProvider);
                 }
                 else
                 {
