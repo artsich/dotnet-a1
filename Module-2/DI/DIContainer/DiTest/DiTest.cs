@@ -3,8 +3,10 @@ using CoreProject.DataAccess.Repository;
 using CoreProject.Models;
 using CoreProject.Settings;
 using Di;
+using Di.Exceptions;
 using DiTest.TestProject.Services;
 using FluentAssertions;
+using System;
 using Xunit;
 
 namespace DiTest.cs
@@ -95,6 +97,20 @@ namespace DiTest.cs
             var rep = container.GetService<IRepository<User>>();
             rep.Should().BeOfType<UserRepository>();
             rep.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void NotFoundImplementation_Becase_Interface_Has_More_Then_One_Child()
+        {
+            var container = new DIContainer();
+            Assert.Throws<MultiplyImplementingException>(() => container.GetService<BaseEntity>());
+        }
+
+        [Fact]
+        public void Interface_Not_Implemented_Exception()
+        {
+            var container = new DIContainer();
+            Assert.Throws<NotImplementedException>(() => container.GetService<IUserService>());
         }
     }
 }

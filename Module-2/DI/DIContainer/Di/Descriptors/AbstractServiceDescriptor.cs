@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Di.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -70,7 +71,7 @@ namespace Di
                 }
                 else
                 {
-                    throw new Exception($"Can't resolve dependency for type: {ctorArgs[i].ParameterType}");
+                    throw new ResolveDependencyException($"Can't resolve dependency for type: {ctorArgs[i].ParameterType}");
                 }
             }
 

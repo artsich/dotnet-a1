@@ -1,4 +1,5 @@
 ﻿using Di.Abstractions;
+using Di.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,8 +34,6 @@ namespace Di
             {
                 return AddTypeToMap(type);
             }
-
-            throw new Exception("Can't find this type");
         }
 
         private object AddTypeToMap(Type type)
@@ -49,8 +48,9 @@ namespace Di
                 }
 
                 var inheritTypes = _assemblyTypesCache[curAssem].Where(p => !p.Equals(type) && type.IsAssignableFrom(p)).ToList();
+                var implementedCount = inheritTypes.Count();
 
-                if(inheritTypes.Count() == 1)
+                if (implementedCount == 1)
                 {
                     var description = new TransientServiceDescriptor(
                         this,
@@ -59,9 +59,13 @@ namespace Di
                         null);
                     _descriptionMap[type] = description;
                 }
+                else if (implementedCount > 1)
+                {
+                    throw new MultiplyImplementingException($"Type {type} has more then one child classes..");
+                }
                 else
                 {
-                    throw new Exception($"Type {type} has more then one child classes");
+                    throw new NotImplementedException($"The type: {type} has not implemented..");
                 }
             }
             else

@@ -4,6 +4,7 @@ using System.Reflection.Emit;
 
 namespace Di
 {
+    //Class not used, just save this code here.
     public class ILHelper
     {
         public static Func<object[], object> CreateObject(ConstructorInfo ctor)
