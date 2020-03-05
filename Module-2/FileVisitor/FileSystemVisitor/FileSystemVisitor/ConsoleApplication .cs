@@ -15,11 +15,12 @@ namespace FileSystemVisitor
 			{
 				BuildTree(args[0], node =>
 				{
+					return true;
 					if (node is FileNode fileNode)
 					{
 						return fileNode.Extension == ".java" || fileNode.Extension == ".py";
 					}
-					return true;
+					return false;
 				});
 			}
 			else
@@ -49,7 +50,7 @@ namespace FileSystemVisitor
 		{
 			if (e.Folder.Name == "folder2")
 			{
-				e.StopSearch = true;
+				//e.StopSearch = true;
 			}
 		}
 

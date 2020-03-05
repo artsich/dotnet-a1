@@ -74,7 +74,7 @@ namespace ExceptionHandling.Parser.Test
 
         [Theory]
         [TestCase("-")]
-        public void IntParse_AfterDigitMustBeDigit_ReturnIncorrect(string str)
+        public void IntParse_AfterMinusMustBeDigit_ReturnIncorrect(string str)
         {
             Assert.Throws<FormatException>(() => ParserUtil.IntParse(str));
         }

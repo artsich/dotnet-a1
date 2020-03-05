@@ -115,7 +115,7 @@ namespace ExceptionHandling.Parser
                 throw new FormatException("After prefix for HEX or Binary format must be digits..");
             }
 
-            var result = 0;
+            long result = 0;
 
             foreach (var ch in str.Substring(startIndex))
             {
@@ -126,8 +126,12 @@ namespace ExceptionHandling.Parser
 
                 result = (result * digitBase) + val;
             }
+            if (result > int.MaxValue)
+            {
+                throw new LenghtRangeException($"Decimal length must be less than {MaxStringIntegerLength}");
+            }
 
-            return isMinus ? -result : result;
+            return isMinus ? (int)-result : (int)result;
         }
     }
 }
