@@ -11,7 +11,7 @@ using Xunit;
 
 namespace DiTest.cs
 {
-    public class DiTest
+    public class DiGetServiceTest
     {
         [Fact]
         public void Add_Singletone_Object_Return_Only_One_Object()
@@ -78,6 +78,10 @@ namespace DiTest.cs
 
             var shopService = container.GetService<ShopService>();
             shopService.Should().NotBeNull();
+
+            shopService.UserRepository.Should().NotBeNull();
+            shopService.ProductRepository.Should().NotBeNull();
+
             shopService.UserRepository.Should().BeOfType<UserRepository>();
             shopService.ProductRepository.Should().BeOfType<ProductRepository>();
         }
