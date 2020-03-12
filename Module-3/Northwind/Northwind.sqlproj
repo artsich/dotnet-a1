@@ -165,6 +165,8 @@
     <Folder Include="Schema Objects\Database Level Objects\Storage\Partition Functions\" />
     <Folder Include="Schema Objects\Database Level Objects\Storage\Partition Schemes\" />
     <Folder Include="Scripts\User-scripts" />
+    <Folder Include="Scripts\User-scripts\task-1" />
+    <Folder Include="Scripts\User-scripts\task-2" />
   </ItemGroup>
   <ItemGroup>
     <BuildContributorArgument Include="OutDir=$(OutDir)" />
@@ -200,7 +202,12 @@
     <None Include="Scripts\Post-Deployment\EmployeeTerritories.sql">
       <SubType>NotInBuild</SubType>
     </None>
-    <None Include="Scripts\User-scripts\Script2.sql" />
+    <None Include="Scripts\User-scripts\task-1\sub-task-3.sql" />
+    <None Include="Scripts\User-scripts\task-1\sub-task-4.sql" />
+    <None Include="Scripts\User-scripts\task-2\task-2-1.sql" />
+    <None Include="Scripts\User-scripts\task-2\task-2-2.sql" />
+    <None Include="Scripts\User-scripts\task-2\task-2-3.sql" />
+    <None Include="Scripts\User-scripts\task-2\task-2-4.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schema Objects\Schemas\Northwind\Tables\CustomerDemographics.table.sql">
@@ -489,6 +496,8 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\Northwind\Programmability\Stored Procedures\CustomErrorThrow.sql" />
+    <None Include="Scripts\User-scripts\task-1\sub-task-1.sql" />
+    <None Include="Scripts\User-scripts\task-1\sub-task-2.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Debug.publish.xml" />

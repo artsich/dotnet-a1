@@ -1,2 +1,2 @@
 ﻿select * from Northwind.Products
-where ProductName like 'cho%olade'
+where ProductName like 'cho_olade'

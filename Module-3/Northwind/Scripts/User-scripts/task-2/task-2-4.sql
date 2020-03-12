@@ -22,8 +22,20 @@ where Empl_Amount.Amount > 150
 --having count(OrderId) > 150
 
 --#3 exist not used here.
+select c.* 
+from Northwind.Customers as c
+where not exists (
+	select count(o.OrderID)
+	from Northwind.Orders as o
+	where c.CustomerID = o.CustomerID
+	having count(o.OrderID) > 0
+)
+
 select Customers.*
 from Northwind.Customers as Customers
 left join Northwind.Orders as Orders
 on Orders.CustomerID = Customers.CustomerID
 where OrderID is null
+
+
+

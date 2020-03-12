@@ -27,4 +27,11 @@ group by Orders.EmployeeID, Orders.CustomerID
 order by Orders.EmployeeID
 
 --#4
-select 
+select Employees.EmployeeID, Employees.City, Customers.City, Customers.CustomerID
+from Northwind.Employees, Northwind.Customers
+where Employees.City = Customers.City
+
+--#5
+select c1.ContactName, c2.ContactName, c1.City
+from Northwind.Customers as c1, Northwind.Customers as c2
+where c1.City = c2.City and c1.CustomerID != c2.CustomerID
