@@ -1,19 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace OrderManagement.DataAccess.Contract
 {
+    public interface IQuery<T>
+    {
+        string Sql { get; }
+
+        ISqlProvider SqlProvider { get; }
+
+        void Execute();
+    }
+
+    public interface ISqlProvider
+    {
+    }
+
     public interface IRepository<T>
     {
-        T GetBy(int guid);
-        
-        IList<T> GetCollection();
+        T GetBy(int id);
 
-        void Insert(T item);
+        IList<T> GetCollection(string[] includesFields = null);
 
-        void Update(T item);
+        T Insert(T item);
 
-        void Delete(int guid);
+        T Update(T item);
+
+        bool Delete(int id);
+
+        IQuery<T> Delete();
     }
 }
