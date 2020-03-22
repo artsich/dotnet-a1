@@ -12,10 +12,8 @@ namespace OrderManagement.DataAccess.Contract.Models
         Completed = 2
     }
 
-    public class Order
+    public class Order : BaseModel
     {
-        public int OrderId { get; set; }
-
         public OrderStatus Status { get; }
 
         public string CustomerId { get; set; }

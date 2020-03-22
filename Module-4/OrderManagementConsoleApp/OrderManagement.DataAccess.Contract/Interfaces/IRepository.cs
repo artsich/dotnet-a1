@@ -1,33 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using OrderManagement.DataAccess.Contract.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OrderManagement.DataAccess.Contract
 {
-    public interface IQuery<T>
-    {
-        string Sql { get; }
-
-        ISqlProvider SqlProvider { get; }
-
-        void Execute();
-    }
-
-    public interface ISqlProvider
-    {
-    }
-
-    public interface IRepository<T>
+    public interface IRepository<T> 
+        where T : BaseModel
     {
         T GetBy(int id);
 
-        IList<T> GetCollection(string[] includesFields = null);
+        IList<T> GetCollection();
 
         T Insert(T item);
 
         T Update(T item);
 
         bool Delete(int id);
-
-        IQuery<T> Delete();
     }
 }

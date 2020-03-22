@@ -6,12 +6,10 @@ namespace OrderManagement.DataAccess.Contract.Models
     {
         public int OrderId{ get; set; }
 
-        [OptionalField]
         public Order Order { get; set; }
 
         public int ProductId { get; set; }
 
-        [OptionalField]
         public Product Product { get; set; }
 
         public decimal UnitPrice { get; set; }

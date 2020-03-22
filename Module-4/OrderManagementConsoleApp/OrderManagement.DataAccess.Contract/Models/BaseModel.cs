@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace OrderManagement.DataAccess.Contract.Models
 {
-    public class Category : BaseModel
+    public abstract class BaseModel
     {
-        public string CategoryName { get; set; }
-
-        public string Description { get; set; }
-        
-        public byte[] Pictire { get; set; }
+        public int Id { get; set; }
     }
 }

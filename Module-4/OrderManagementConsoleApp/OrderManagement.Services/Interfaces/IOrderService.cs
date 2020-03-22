@@ -3,20 +3,12 @@ using OrderManagement.DataAccess.Contract.Models;
 
 namespace OrderManagement.Services.Interfaces
 {
-    public interface IOrderService
+    public interface IOrderService : IService<Order>
     {
-        Order CreateOrder();
+        int DeleteNotCompletedOrders();
 
-        Order GetOrder(int id);
+        void MoveToProgress(int id);
 
-        IList<Order> GetOrders();
-
-        IList<Order> GetLiteOrdersInfo();
-
-        void MoveOrderStatusToWork(Order order);
-
-        void MoveOrderStatusToCompleted(Order order);
-
-        void DeleteNotCompletedOrders();
+        void MarkDone(int id);
     }
 }

@@ -1,9 +1,7 @@
 ﻿namespace OrderManagement.DataAccess.Contract.Models
 {
-    public class Supplier
+    public class Supplier : BaseModel
     {
-        public int SupplierId { get; set; }
-
         public string CompanyName { get; set; }
 
         public string ContactName { get; set; }

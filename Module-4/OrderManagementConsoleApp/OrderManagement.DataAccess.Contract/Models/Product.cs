@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace OrderManagement.DataAccess.Contract.Models
 {
-    public class Product
+    public class Product : BaseModel
     {
-        public int ProductId { get; set; }
-        
         public string ProductName { get; set; }
 
         public int? SupplierId { get; set; }
