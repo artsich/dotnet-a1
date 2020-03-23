@@ -16,11 +16,15 @@ namespace OrderManagement.DataAccess
         protected readonly string ConnectionString;
         protected readonly DbProviderFactory ProviderFactory;
 
-        protected string InsertSql;
-        protected string GetByIdSql;
-        protected string UpdateSql;
-        protected string DeleteSql;
-        protected string GetCollectionSql;
+        protected abstract string InsertSql { get; }
+
+        protected abstract string GetByIdSql { get; }
+
+        protected abstract string UpdateSql { get; }
+
+        protected abstract string DeleteSql { get; }
+
+        protected abstract string GetCollectionSql { get; }
 
         protected string ParamIdName = "@id";
 

@@ -1,5 +1,4 @@
-﻿using OrderManagement.DataAccess.Contract.Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace OrderManagement.DataAccess.Contract.Models
@@ -42,7 +41,6 @@ namespace OrderManagement.DataAccess.Contract.Models
 
         public string ShipCountry { get; set; }
 
-        [OptionalField]
         public IList<OrderDetail> OrderDetails { get; set; }
 
         public Order(DateTime? orderDate, DateTime? shippedDate, OrderStatus status)

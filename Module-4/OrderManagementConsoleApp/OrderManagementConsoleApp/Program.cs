@@ -1,5 +1,7 @@
-﻿using OrderManagement.Services;
+﻿using OrderManagement.DataAccess.Contract.Models;
+using OrderManagement.Services;
 using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
@@ -8,6 +10,12 @@ using System.Threading.Tasks;
 
 namespace OrderManagement
 {
+
+    /*
+     * create OrderDetail repository,
+     * 
+     */
+
     public class Program
     {
         static void Main(string[] args)
@@ -22,8 +30,27 @@ namespace OrderManagement
             var rep = new DataAccess.OrderRepository(connString, "System.Data.SqlClient");
 
             var service = new OrderService(rep);
-            var order = service.GetOrder(10250);
-            var res = service.GetOrders();
+            //var order = service.GetOrder(10250);
+            //var res = service.GetOrders();
+
+            var t = new DataAccess.OrderDetailRepository(connString, "System.Data.SqlClient");
+            t.InsertDetailsInOrder(10248, new List<OrderDetail>()
+            {
+                new OrderDetail()
+                {
+                    ProductId = 51,
+                    Quantity = 12,
+                    UnitPrice = 14,
+                    Discount = 0
+                },
+                new OrderDetail()
+                {
+                    ProductId = 14,
+                    Quantity = 12,
+                    UnitPrice = 14,
+                    Discount = 0
+                }
+            });
 
             Console.ReadKey();
         }

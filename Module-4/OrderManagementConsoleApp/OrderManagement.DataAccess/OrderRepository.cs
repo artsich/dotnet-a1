@@ -7,17 +7,29 @@ namespace OrderManagement.DataAccess
 {
     public class OrderRepository : AdoAbstractRepository<Order>, IOrderRepository
     {
+        private string insertSql;
+        private string getByIdSql;
+        private string updateSql;
+        private string deleteSql;
+        private string getCollectionSql;
+
+        protected override string InsertSql { get => insertSql;  }
+        protected override string GetByIdSql { get => getByIdSql;  }
+        protected override string UpdateSql { get => updateSql; }
+        protected override string DeleteSql { get => deleteSql; }
+        protected override string GetCollectionSql { get => getCollectionSql; }
+
         public OrderRepository(string connectionString, string nameProvider) :
             base(connectionString, nameProvider)
         {
-            GetByIdSql = Resources.GetByIdSql;
-            GetCollectionSql = Resources.GetCollectionSql;
-            UpdateSql = Resources.UpdateSql;
-            DeleteSql = Resources.DeleteSql;
-            InsertSql = Resources.InsertSql;
+            getByIdSql = Resources.GetByIdSql;
+            getCollectionSql = Resources.GetCollectionSql;
+            updateSql = Resources.UpdateSql;
+            deleteSql = Resources.DeleteSql;
+            insertSql = Resources.InsertSql;
 
             //... need to move code bellow in resources.
-            GetByIdSql = "select  OrderID," +
+            getByIdSql = "select  OrderID," +
                                 "CustomerID," +
                                 "EmployeeID," +
                                 "OrderDate," +
@@ -39,16 +51,16 @@ namespace OrderManagement.DataAccess
                                 "from dbo.Orders as Orders " +
                                 "where OrderId = @id;";
 
-            UpdateSql = "" +
+            updateSql = "" +
                             "UPDATE table_name" +
                             "SET " +
                             "   column1 = value1, " +
                             "   column2 = value2, " +
                             "WHERE OrderId=@id";
 
-            DeleteSql = "DELETE FROM dbo.Orders WHERE OrderId=@id";
+            deleteSql = "DELETE FROM dbo.Orders WHERE OrderId=@id";
 
-            GetCollectionSql = "select  OrderID," +
+            getCollectionSql = "select  OrderID," +
                                    "CustomerID," +
                                    "EmployeeID," +
                                    "OrderDate," +

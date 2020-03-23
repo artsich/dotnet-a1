@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Infrastructure\OptionalFieldAttribute.cs" />
+    <Compile Include="Interfaces\IOrderDetailRepository.cs" />
     <Compile Include="Interfaces\IOrderRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Models\BaseModel.cs" />

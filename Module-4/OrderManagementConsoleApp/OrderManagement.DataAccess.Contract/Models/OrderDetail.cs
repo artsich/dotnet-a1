@@ -1,10 +1,8 @@
-﻿using OrderManagement.DataAccess.Contract.Infrastructure;
-
-namespace OrderManagement.DataAccess.Contract.Models
+﻿namespace OrderManagement.DataAccess.Contract.Models
 {
     public class OrderDetail
     {
-        public int OrderId{ get; set; }
+        public int OrderId { get; set; }
 
         public Order Order { get; set; }
 
