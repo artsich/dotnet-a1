@@ -22,14 +22,14 @@ namespace OrderManagement.DataAccess.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class OrderDetailSqls {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal OrderDetailSqls() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace OrderManagement.DataAccess.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OrderManagement.DataAccess.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OrderManagement.DataAccess.Properties.OrderDetailSqls", typeof(OrderDetailSqls).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,22 @@ namespace OrderManagement.DataAccess.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to insert into dbo.[Order Details] (OrderID, ProductID, UnitPrice, Quantity, Discount) VALUES(@orderId, @productId_{i}, @unitPrice_{i}, @qty_{i}, @discount_{i});.
         /// </summary>
-        internal static string DeleteSql {
+        internal static string Insert {
             get {
-                return ResourceManager.GetString("DeleteSql", resourceCulture);
+                return ResourceManager.GetString("Insert", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to UPDATE dbo.[Order Details]
+        ///SET UnitPrice=&apos;@unitPrice&apos;, Quantity=&apos;@qty&apos;, Discount=&apos;@discount&apos;
+        ///WHERE OrderId=&apos;@orderId&apos;and ProductID=&apos;@productId&apos;;.
         /// </summary>
-        internal static string GetByIdSql {
+        internal static string Update {
             get {
-                return ResourceManager.GetString("GetByIdSql", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string GetCollectionSql {
-            get {
-                return ResourceManager.GetString("GetCollectionSql", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string InsertSql {
-            get {
-                return ResourceManager.GetString("InsertSql", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string UpdateSql {
-            get {
-                return ResourceManager.GetString("UpdateSql", resourceCulture);
+                return ResourceManager.GetString("Update", resourceCulture);
             }
         }
     }

@@ -1,92 +1,165 @@
 ﻿using OrderManagement.DataAccess.Contract.Interfaces;
 using OrderManagement.DataAccess.Contract.Models;
+using OrderManagement.DataAccess.Contract.Models.Statistic;
+using OrderManagement.DataAccess.Extensions;
 using OrderManagement.DataAccess.Properties;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 
 namespace OrderManagement.DataAccess
 {
     public class OrderRepository : AdoAbstractRepository<Order>, IOrderRepository
     {
-        private string insertSql;
-        private string getByIdSql;
-        private string updateSql;
-        private string deleteSql;
-        private string getCollectionSql;
+        private readonly string UpdateSql = OrderSqls.UpdateSql;
+        private readonly string InsertSql = OrderSqls.InsertSql;
+        private readonly string MarkAsDoneSql = OrderSqls.MarkAsDone;
+        private readonly string MoveToProgressSql = OrderSqls.MoveToProgress;
 
-        protected override string InsertSql { get => insertSql;  }
-        protected override string GetByIdSql { get => getByIdSql;  }
-        protected override string UpdateSql { get => updateSql; }
-        protected override string DeleteSql { get => deleteSql; }
-        protected override string GetCollectionSql { get => getCollectionSql; }
+        protected override string GetByIdSql => OrderSqls.GetByIdSql;
+
+        protected override string DeleteSql => OrderSqls.DeleteSql;
+
+        protected override string GetCollectionSql => OrderSqls.GetCollectionSql;
 
         public OrderRepository(string connectionString, string nameProvider) :
             base(connectionString, nameProvider)
         {
-            getByIdSql = Resources.GetByIdSql;
-            getCollectionSql = Resources.GetCollectionSql;
-            updateSql = Resources.UpdateSql;
-            deleteSql = Resources.DeleteSql;
-            insertSql = Resources.InsertSql;
-
-            //... need to move code bellow in resources.
-            getByIdSql = "select  OrderID," +
-                                "CustomerID," +
-                                "EmployeeID," +
-                                "OrderDate," +
-                                "RequiredDate," +
-                                "ShippedDate," +
-                                "ShipVia," +
-                                "Freight," +
-                                "ShipName," +
-                                "ShipAddress," +
-                                "ShipCity, " +
-                                "ShipRegion," +
-                                "ShipPostalCode," +
-                                "ShipCountry," +
-                                "case " +
-                                "    when OrderDate is null then 0    " +
-                                "    when ShippedDate is null then 1  " +
-                                "    else 2                           " +
-                                "end as 'Status'                      " +
-                                "from dbo.Orders as Orders " +
-                                "where OrderId = @id;";
-
-            updateSql = "" +
-                            "UPDATE table_name" +
-                            "SET " +
-                            "   column1 = value1, " +
-                            "   column2 = value2, " +
-                            "WHERE OrderId=@id";
-
-            deleteSql = "DELETE FROM dbo.Orders WHERE OrderId=@id";
-
-            getCollectionSql = "select  OrderID," +
-                                   "CustomerID," +
-                                   "EmployeeID," +
-                                   "OrderDate," +
-                                   "RequiredDate," +
-                                   "ShippedDate," +
-                                   "ShipVia," +
-                                   "Freight," +
-                                   "ShipName," +
-                                   "ShipAddress," +
-                                   "ShipCity, " +
-                                   "ShipRegion," +
-                                   "ShipPostalCode," +
-                                   "ShipCountry," +
-                                   "case " +
-                                   "    when OrderDate is null then 0    " +
-                                   "    when ShippedDate is null then 1  " +
-                                   "    else 2                           " +
-                                   "end as 'Status'                      " +
-                                   "from dbo.Orders as Orders;";
         }
 
-        public int DeleteNotCompletedOrders()
+        public void MarkAsDone(int id, DateTime dateTime)
         {
-            int deletedRows = 0;
-            //..//
-            return deletedRows;
+            SetupDateInAttribute(id, dateTime, MarkAsDoneSql);
+        }
+
+        public void MoveToProgress(int id, DateTime dateTime)
+        {
+            SetupDateInAttribute(id, dateTime, MoveToProgressSql);
+        }
+
+        public CustOrderHist GetCustOrderHist(int customerId)
+        {
+            return new CustOrderHist();
+        }
+
+        public CustOrdersDetail GetCustOrderDetail(int orderId)
+        {
+            return new CustOrdersDetail();
+        }
+
+        public override Order GetBy(int guid)
+        {
+            Order result = default;
+            using (var connection = ProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = GetByIdSql;
+
+                    command.AddParameter(ParamIdName, DbType.Int32, guid);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            result = FromReaderToObject(reader);
+
+                            if (reader.NextResult())
+                            {
+                                result.OrderDetails = ParseOrderDetail(reader);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public override void Insert(Order item)
+        {
+            UpdateOrInsert(item, InsertSql);
+        }
+
+        public override void Update(Order item)
+        {
+            if (item.Status == OrderStatus.Completed || item.Status == OrderStatus.InWork)
+            {
+                throw new Exception("You can't update completed or is working order");
+            }
+
+            UpdateOrInsert(item, UpdateSql);
+        }
+
+        private void UpdateOrInsert(Order item, string sql)
+        {
+            using (var connection = ProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = sql;
+
+                    command.AddParameter("@custId", DbType.String, item.CustomerId)
+                            .AddParameter("@emplId", DbType.Int32, item.EmployeeId)
+                            .AddParameter("@reqDate", DbType.DateTime, item.RequiredDate)
+                            .AddParameter("@shipVia", DbType.Int32, item.ShipVia)
+                            .AddParameter("@freight", DbType.Decimal, item.Freight)
+                            .AddParameter("@shipName", DbType.String, item.ShipName)
+                            .AddParameter("@shipAddress", DbType.String, item.ShipAddress)
+                            .AddParameter("@shipCity", DbType.String, item.ShipCity)
+                            .AddParameter("@shipRegion", DbType.String, item.ShipRegion)
+                            .AddParameter("@shipPostalCode", DbType.String, item.ShipPostalCode)
+                            .AddParameter("@shipCntry", DbType.String, item.ShipCountry);
+
+                    if (command.ExecuteNonQuery() == 0)
+                    {
+                        throw new Exception("yyyyyps");
+                    }
+                }
+            }
+        }
+
+        private void SetupDateInAttribute(int id, DateTime dateTime, string sql)
+        {
+            using (var connection = ProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = sql;
+                    command.AddParameter(ParamIdName, DbType.Int32, id);
+                    command.AddParameter("@dateTime", DbType.DateTime, dateTime);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private IList<OrderDetail> ParseOrderDetail(DbDataReader reader)
+        {
+            var result = new List<OrderDetail>();
+
+            while (reader.Read())
+            {
+                result.Add(new OrderDetail()
+                {
+                    OrderId = reader.SafeCastInt32(0),
+                    ProductId = reader.SafeCastInt32(1),
+                    UnitPrice = reader.SafeCastDecimal(2),
+                    Quantity = reader.SafeCastInt16(3),
+                    Discount = reader.SafeCastFloat(4)
+                });
+            }
+
+            return result;
         }
 
         protected override Order FromReaderToObject(DbDataReader reader)

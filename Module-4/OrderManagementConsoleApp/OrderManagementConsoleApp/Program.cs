@@ -33,6 +33,9 @@ namespace OrderManagement
             //var order = service.GetOrder(10250);
             //var res = service.GetOrders();
 
+            var rew = service.GetById(10248);
+            return;
+
             var t = new DataAccess.OrderDetailRepository(connString, "System.Data.SqlClient");
             t.InsertDetailsInOrder(10248, new List<OrderDetail>()
             {

@@ -4,15 +4,14 @@ using System.Collections.Generic;
 namespace OrderManagement.Services.Interfaces
 {
     public interface IService<T>
-        where T : BaseModel
     {
         T GetById(int id);
 
-        IList<T> GetCollection(T obj);
+        IList<T> GetCollection();
 
         void Create(T obj);
 
-        T Update(T obj);
+        void Update(T obj);
 
         bool Delete(int id);
     }

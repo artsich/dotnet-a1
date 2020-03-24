@@ -1,32 +1,24 @@
 ﻿using OrderManagement.DataAccess.Contract;
 using OrderManagement.DataAccess.Contract.Models;
-using System;
+using OrderManagement.DataAccess.Extensions;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrderManagement.DataAccess
 {
     public abstract class AdoAbstractRepository<T> : IRepository<T>
-        where T : BaseModel
     {
+        protected const string ParamIdName = "@id";
+
         protected readonly string ConnectionString;
         protected readonly DbProviderFactory ProviderFactory;
 
-        protected abstract string InsertSql { get; }
-
         protected abstract string GetByIdSql { get; }
-
-        protected abstract string UpdateSql { get; }
 
         protected abstract string DeleteSql { get; }
 
         protected abstract string GetCollectionSql { get; }
-
-        protected string ParamIdName = "@id";
 
         public AdoAbstractRepository(string connectionString, string nameProvider)
         {
@@ -36,7 +28,11 @@ namespace OrderManagement.DataAccess
 
         protected abstract T FromReaderToObject(DbDataReader reader);
 
-        public T GetBy(int guid)
+        public abstract void Insert(T item);
+
+        public abstract void Update(T item);
+
+        public virtual T GetBy(int guid)
         {
             T result = default;
 
@@ -48,14 +44,7 @@ namespace OrderManagement.DataAccess
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = GetByIdSql;
-
-                    var parameter = command.CreateParameter();
-                    parameter.ParameterName = ParamIdName;
-                    parameter.DbType = DbType.Int32;
-                    parameter.Value = guid;
-
-                    command.Parameters.Add(parameter);
-                    command.CommandType = CommandType.Text;
+                    command.AddParameter(ParamIdName, DbType.Int32, guid);
 
                     using (var reader = command.ExecuteReader())
                     {
@@ -70,7 +59,7 @@ namespace OrderManagement.DataAccess
             return result;
         }
 
-        public IList<T> GetCollection()
+        public virtual IList<T> GetCollection()
         {
             IList<T> result = new List<T>();
 
@@ -82,8 +71,7 @@ namespace OrderManagement.DataAccess
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = GetCollectionSql;
-                    command.CommandType = CommandType.Text;
-                    
+
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -97,33 +85,7 @@ namespace OrderManagement.DataAccess
             return result;
         }
 
-        public T Insert(T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Update(T  item)
-        {
-            using (var connection = ProviderFactory.CreateConnection())
-            {
-                connection.ConnectionString = ConnectionString;
-                connection.Open();
-
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = UpdateSql;
-                    var parameter = command.CreateParameter();
-                    parameter.ParameterName = ParamIdName;
-                    parameter.DbType = DbType.Int32;
-                    command.Parameters.Add(parameter);
-                }
-            }
-
-            ///check this return statement
-            return item;
-        }
-        
-        public bool Delete(int id)
+        public virtual bool Delete(int id)
         {
             bool isDeleted = false;
 
@@ -135,10 +97,7 @@ namespace OrderManagement.DataAccess
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = DeleteSql;
-                    var parameter = command.CreateParameter();
-                    parameter.Value = id;
-                    parameter.DbType = DbType.Int32;
-                    command.Parameters.Add(parameter);
+                    command.AddParameter(ParamIdName, DbType.Int32, id);
                     isDeleted = command.ExecuteNonQuery() > 0;
                 }
             }

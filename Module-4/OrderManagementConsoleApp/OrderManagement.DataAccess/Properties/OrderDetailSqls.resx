@@ -117,19 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DeleteSql" xml:space="preserve">
-    <value />
+  <data name="Insert" xml:space="preserve">
+    <value>insert into dbo.[Order Details] (OrderID, ProductID, UnitPrice, Quantity, Discount) VALUES(@orderId, @productId_{i}, @unitPrice_{i}, @qty_{i}, @discount_{i});</value>
   </data>
-  <data name="GetByIdSql" xml:space="preserve">
-    <value />
-  </data>
-  <data name="GetCollectionSql" xml:space="preserve">
-    <value />
-  </data>
-  <data name="InsertSql" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UpdateSql" xml:space="preserve">
-    <value />
+  <data name="Update" xml:space="preserve">
+    <value>UPDATE dbo.[Order Details]
+SET UnitPrice='@unitPrice', Quantity='@qty', Discount='@discount'
+WHERE OrderId='@orderId'and ProductID='@productId';</value>
   </data>
 </root>

@@ -42,14 +42,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdoAbstractRepository.cs" />
-    <Compile Include="DbDataReaderExtension.cs" />
+    <Compile Include="Extensions\DbCommandExtension.cs" />
+    <Compile Include="Extensions\DbDataReaderExtension.cs" />
     <Compile Include="OrderDetailRepository.cs" />
     <Compile Include="OrderRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
+    <Compile Include="Properties\OrderDetailSqls.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
+      <DependentUpon>OrderDetailSqls.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\OrderSqls.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderSqls.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -59,9 +65,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Include="Properties\OrderDetailSqls.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>OrderDetailSqls.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\OrderSqls.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderSqls.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

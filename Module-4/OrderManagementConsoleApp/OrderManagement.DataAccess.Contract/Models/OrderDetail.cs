@@ -1,4 +1,6 @@
-﻿namespace OrderManagement.DataAccess.Contract.Models
+﻿using System;
+
+namespace OrderManagement.DataAccess.Contract.Models
 {
     public class OrderDetail
     {
@@ -12,8 +14,8 @@
 
         public decimal UnitPrice { get; set; }
 
-        public int Quantity { get; set; }
-
-        public double Discount { get; set; }
+        public short Quantity { get; set; }
+       
+        public float Discount { get; set; }
     }
 }

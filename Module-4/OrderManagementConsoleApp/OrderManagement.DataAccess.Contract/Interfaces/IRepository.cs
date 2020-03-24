@@ -4,16 +4,15 @@ using System.Linq;
 
 namespace OrderManagement.DataAccess.Contract
 {
-    public interface IRepository<T> 
-        where T : BaseModel
+    public interface IRepository<T>
     {
         T GetBy(int id);
 
         IList<T> GetCollection();
 
-        T Insert(T item);
+        void Insert(T item);
 
-        T Update(T item);
+        void Update(T item);
 
         bool Delete(int id);
     }

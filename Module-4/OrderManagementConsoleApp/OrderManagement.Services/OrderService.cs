@@ -9,25 +9,36 @@ namespace OrderManagement.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository OrderRepository;
+        private readonly IOrderDetailRepository OrderDetailRepository;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(
+            IOrderRepository orderRepository, 
+            IOrderDetailRepository orderDetailRepository)
         {
             OrderRepository = orderRepository;
+            OrderDetailRepository = orderDetailRepository;
         }
 
         public void Create(Order obj)
         {
-            throw new NotImplementedException();
+            OrderRepository.Insert(obj);
         }
 
         public bool Delete(int id)
         {
+            GetById(id);
+
             return OrderRepository.Delete(id);
         }
 
-        public int DeleteNotCompletedOrders()
+        public void Update(Order obj)
         {
-            return OrderRepository.DeleteNotCompletedOrders();
+            var oldOrder = GetById(obj.Id);
+
+            if (obj.Status == OrderStatus.New)
+            {
+                OrderRepository.Update(obj);
+            }
         }
 
         public Order GetById(int id)
@@ -48,17 +59,15 @@ namespace OrderManagement.Services
 
         public void MarkDone(int id)
         {
-            throw new NotImplementedException();
+            GetById(id);
+            OrderRepository.MarkAsDone(id, DateTime.Now);
         }
 
         public void MoveToProgress(int id)
         {
-            throw new NotImplementedException();
-        }
+            GetById(id);
 
-        public Order Update(Order obj)
-        {
-            throw new NotImplementedException();
+            OrderRepository.MoveToProgress(id, DateTime.Now);
         }
     }
 }

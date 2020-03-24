@@ -1,9 +1,12 @@
 ﻿using OrderManagement.DataAccess.Contract.Models;
+using System;
 
 namespace OrderManagement.DataAccess.Contract.Interfaces
 {
     public interface IOrderRepository : IRepository<Order>
     {
-        int DeleteNotCompletedOrders();
+        void MarkAsDone(int id, DateTime dateTime);
+
+        void MoveToProgress(int id, DateTime dataTime);
     }
 }

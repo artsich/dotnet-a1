@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 
-namespace OrderManagement.DataAccess
+namespace OrderManagement.DataAccess.Extensions
 {
     public static class DbDataReaderExtension
     {
@@ -17,6 +17,21 @@ namespace OrderManagement.DataAccess
         public static decimal? SafeCastNullableDecimal(this DbDataReader reader, int ordinal)
         {
             return SafeCast<decimal?>(reader, ordinal);
+        }
+
+        public static float SafeCastFloat(this DbDataReader reader, int ordinal)
+        {
+            return SafeCast<float>(reader, ordinal);
+        }
+
+        public static short SafeCastInt16(this DbDataReader reader, int ordinal)
+        {
+            return SafeCast<short>(reader, ordinal);
+        }
+
+        public static decimal SafeCastDecimal(this DbDataReader reader, int ordinal)
+        {
+            return SafeCast<decimal>(reader, ordinal);
         }
 
         public static int SafeCastInt32(this DbDataReader reader, int ordinal)
@@ -37,6 +52,11 @@ namespace OrderManagement.DataAccess
         public static DateTime? SafeCastNullableDateTime(this DbDataReader reader, int ordinal)
         {
             return SafeCast<DateTime?>(reader, ordinal);
+        }
+
+        public static double SafeCastDouble(this DbDataReader reader, int ordinal)
+        {
+            return SafeCast<double>(reader, ordinal);
         }
     }
 }
