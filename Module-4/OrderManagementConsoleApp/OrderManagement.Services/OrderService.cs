@@ -1,6 +1,6 @@
 ﻿using OrderManagement.DataAccess.Contract.Interfaces;
 using OrderManagement.DataAccess.Contract.Models;
-using OrderManagement.Services.Exceptions;
+using OrderManagement.DataAccess.Exceptions;
 using OrderManagement.Services.Interfaces;
 using System;
 using System.Collections.Generic;

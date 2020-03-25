@@ -57,6 +57,10 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlClient, Version=4.6.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.8.1\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -67,9 +71,17 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\SettingResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SettingResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RepositoryTests\OrderDetailRepositoryTest.cs" />
+    <Compile Include="RepositoryTests\OrderRepositoryTest.cs" />
     <Compile Include="ServicesTests\OrderDetailServicesTests.cs" />
     <Compile Include="ServicesTests\OrderServiceInsertTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -79,13 +91,21 @@
       <Project>{23c509b3-dc9a-46a0-8699-e90b5b8be23f}</Project>
       <Name>OrderManagement.DataAccess.Contract</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OrderManagement.DataAccess\OrderManagement.DataAccess.csproj">
+      <Project>{D3BC05CC-3A2C-4CFF-B7EC-28068D9DD605}</Project>
+      <Name>OrderManagement.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OrderManagement.Services\OrderManagement.Services.csproj">
       <Project>{fc3bc50d-d72e-49d5-9773-640e70603ab8}</Project>
       <Name>OrderManagement.Services</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="RepositoryTests\" />
+    <EmbeddedResource Include="Properties\SettingResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SettingResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

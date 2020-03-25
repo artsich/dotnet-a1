@@ -1,6 +1,7 @@
 ﻿using OrderManagement.DataAccess.Contract.Interfaces;
 using OrderManagement.DataAccess.Contract.Models;
 using OrderManagement.DataAccess.Contract.Models.Statistic;
+using OrderManagement.DataAccess.Exceptions;
 using OrderManagement.DataAccess.Extensions;
 using OrderManagement.DataAccess.Properties;
 using System;
@@ -114,7 +115,7 @@ namespace OrderManagement.DataAccess
         {
             if (item.Status == OrderStatus.IsDone || item.Status == OrderStatus.InProgress)
             {
-                throw new Exception("You can't update `Completed` or `in work` order");
+                throw new UpdateEntityException("You can't update `Completed` or `in work` order");
             }
 
             using (var connection = ProviderFactory.CreateConnection())
@@ -127,25 +128,6 @@ namespace OrderManagement.DataAccess
                     command.CommandText = UpdateSql;
                     PrepareInsertUpdateCommand(item, command);
 
-                    if (command.ExecuteNonQuery() == 0)
-                    {
-                        throw new Exception("yyyyyps");
-                    }
-                }
-            }
-        }
-
-        private void UpdateOrInsert(Order item, string sql)
-        {
-            using (var connection = ProviderFactory.CreateConnection())
-            {
-                connection.ConnectionString = ConnectionString;
-                connection.Open();
-
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = sql;
-                    PrepareInsertUpdateCommand(item, command);
                     if (command.ExecuteNonQuery() == 0)
                     {
                         throw new Exception("yyyyyps");

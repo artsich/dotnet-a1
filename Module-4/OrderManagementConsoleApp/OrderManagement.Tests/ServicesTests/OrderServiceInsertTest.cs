@@ -2,8 +2,8 @@
 using Moq;
 using OrderManagement.DataAccess.Contract.Interfaces;
 using OrderManagement.DataAccess.Contract.Models;
+using OrderManagement.DataAccess.Exceptions;
 using OrderManagement.Services;
-using OrderManagement.Services.Exceptions;
 
 namespace OrderManagement.Tests
 {
