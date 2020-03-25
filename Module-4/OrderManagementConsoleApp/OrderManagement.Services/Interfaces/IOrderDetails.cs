@@ -7,8 +7,6 @@ namespace OrderManagement.Services.Interfaces
     {
         OrderDetail GetById(int orderId, int productId);
 
-        IList<OrderDetail> GetCollection();
-
         void Create(OrderDetail obj);
 
         void Update(OrderDetail obj);

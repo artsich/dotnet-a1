@@ -8,9 +8,11 @@ namespace OrderManagement.DataAccess.Contract.Interfaces
     {
         void Update(OrderDetail detail);
 
-        void Delete(int orderId, int productId);
+        int Delete(int orderId);
+        
+        bool Delete(int orderId, int productId);
 
-        void Get(int orderId, int productId);
+        OrderDetail Get(int orderId, int productId);
 
         int InsertDetailsInOrder(int orderId, ICollection<OrderDetail> details);
 

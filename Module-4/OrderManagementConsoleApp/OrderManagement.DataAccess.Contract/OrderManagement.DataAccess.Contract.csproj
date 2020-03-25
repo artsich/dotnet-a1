@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\EntityNotDeletedException.cs" />
+    <Compile Include="Exceptions\InsertEntityException.cs" />
+    <Compile Include="Exceptions\NotFoundEntityException.cs" />
+    <Compile Include="Exceptions\UpdateEntityException.cs" />
     <Compile Include="Interfaces\IOrderDetailRepository.cs" />
     <Compile Include="Interfaces\IOrderRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
@@ -49,6 +53,8 @@
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Statistic\CustOrderHist.cs" />
+    <Compile Include="Models\Statistic\CustOrdersDetail.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

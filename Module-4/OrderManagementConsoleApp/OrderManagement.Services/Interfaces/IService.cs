@@ -9,10 +9,10 @@ namespace OrderManagement.Services.Interfaces
 
         IList<T> GetCollection();
 
-        void Create(T obj);
+        T Create(T obj);
 
         void Update(T obj);
 
-        bool Delete(int id);
+        void Delete(int id);
     }
 }

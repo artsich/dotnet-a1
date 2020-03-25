@@ -62,7 +62,7 @@ namespace OrderManagement.DataAccess.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to DELETE FROM dbo.Orders 
-        ///WHERE OrderId=&apos;@id&apos; and (OrderDate is null or ShippedDate is null);.
+        ///WHERE OrderId=@id and (OrderDate is null or ShippedDate is null);.
         /// </summary>
         internal static string DeleteSql {
             get {
@@ -91,7 +91,8 @@ namespace OrderManagement.DataAccess.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to insert into dbo.Orders (CustomerID, EmployeeID, RequiredDate, ShipVia, Freight, ShipName, ShipAddress, ShipCity, ShipRegion, ShipPostalCode, ShipCountry)
-        ///values (&apos;@custId&apos;, &apos;@emplId&apos;, &apos;@reqDate&apos;, &apos;@shipVia&apos;, &apos;@freight&apos;, &apos;@shipName&apos;, &apos;@shipAddress&apos;, &apos;@shipCity&apos;, &apos;shipRegion&apos;, &apos;@shipPostalCode&apos;, &apos;@shipCntry&apos;).
+        ///values (@custId, @emplId, @reqDate, @shipVia, @freight, @shipName, @shipAddress, @shipCity, @shipRegion, @shipPostalCode, @shipCntry);
+        ///select convert(int, IDENT_CURRENT(&apos;Orders&apos;));.
         /// </summary>
         internal static string InsertSql {
             get {
@@ -100,7 +101,7 @@ namespace OrderManagement.DataAccess.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to update [dbo].[Orders] set ShippedDate=&apos;@dateTime&apos; where OrderId=&apos;@id&apos; and ShippedDate is null;.
+        ///   Looks up a localized string similar to update [dbo].[Orders] set ShippedDate=@dateTime where OrderId=@id and ShippedDate is null;.
         /// </summary>
         internal static string MarkAsDone {
             get {
@@ -109,7 +110,7 @@ namespace OrderManagement.DataAccess.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to update [dbo].[Orders] set OrderDate=&apos;@dateTime&apos; where OrderId=&apos;@id&apos; and OrderDate is null;.
+        ///   Looks up a localized string similar to update [dbo].[Orders] set OrderDate=@dateTime where OrderId=@id and OrderDate is null;.
         /// </summary>
         internal static string MoveToProgress {
             get {
@@ -119,18 +120,18 @@ namespace OrderManagement.DataAccess.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to UPDATE [dbo].[Orders]
-        ///   SET [CustomerID] = &apos;@custId&apos;
-        ///      ,[EmployeeID] = &apos;@emplId&apos;
-        ///      ,[RequiredDate] = &apos;@reqDate&apos;
-        ///      ,[ShipVia] = &apos;@shipVia&apos;
-        ///      ,[Freight] = &apos;@freight&apos;
-        ///      ,[ShipName] = &apos;@shipName&apos;
-        ///      ,[ShipAddress] = &apos;@shipAddress&apos;
-        ///      ,[ShipCity] = &apos;@shipCity&apos;
-        ///      ,[ShipRegion] = &apos;@shipRegion&apos;
-        ///      ,[ShipPostalCode] = &apos;@shipPostalCode&apos;
-        ///      ,[ShipCountry] = &apos;@shipCntry&apos;
-        ///WHERE OrderId=&apos;@orderId&apos;.
+        ///   SET [CustomerID] = @custId
+        ///      ,[EmployeeID] = @emplId
+        ///      ,[RequiredDate] = @reqDate
+        ///      ,[ShipVia] = @shipVia
+        ///      ,[Freight] = @freight
+        ///      ,[ShipName] = @shipName
+        ///      ,[ShipAddress] = @shipAddress
+        ///      ,[ShipCity] = @shipCity
+        ///      ,[ShipRegion] = @shipRegion
+        ///      ,[ShipPostalCode] = @shipPostalCode
+        ///      ,[ShipCountry] = @shipCntry
+        ///WHERE OrderId=@orderId.
         /// </summary>
         internal static string UpdateSql {
             get {

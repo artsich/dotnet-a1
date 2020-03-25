@@ -12,8 +12,7 @@ namespace OrderManagement
 {
 
     /*
-     * create OrderDetail repository,
-     * 
+     * todo: check update method OrderService
      */
 
     public class Program
@@ -29,14 +28,20 @@ namespace OrderManagement
 
             var rep = new DataAccess.OrderRepository(connString, "System.Data.SqlClient");
 
-            var service = new OrderService(rep);
-            //var order = service.GetOrder(10250);
-            //var res = service.GetOrders();
+            var or = new Order();
+            rep.Insert(or);
+            rep.Delete(or.Id);
 
-            var rew = service.GetById(10248);
             return;
 
+            //var service = new OrderService(rep);
+            //var order = service.GetOrder(10250);
+            //var res = service.GetOrders();
+            //var rew = service.GetById(10248);
+            //return;
+
             var t = new DataAccess.OrderDetailRepository(connString, "System.Data.SqlClient");
+            
             t.InsertDetailsInOrder(10248, new List<OrderDetail>()
             {
                 new OrderDetail()

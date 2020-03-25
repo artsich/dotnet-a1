@@ -26,6 +26,74 @@ namespace OrderManagement.DataAccess
             ProviderFactory = DbProviderFactories.GetFactory(nameProvider);
         }
 
+        public int Delete(int orderId)
+        {
+            using (var connection = ProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "delete from dbo.[Order Details] where OrderId=@orderId";
+                    command.AddParameter("@orderId", DbType.Int32, orderId);
+                    return command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public bool Delete(int orderId, int productId)
+        {
+            using (var connection = ProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "delete from dbo.[Order Details] where OrderId=@orderId and ProductId=@prodId";
+                    command.AddParameter("@orderId", DbType.Int32, orderId);
+                    command.AddParameter("@prodId", DbType.Int32, productId);
+                    return command.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public OrderDetail Get(int orderId, int productId)
+        {
+            OrderDetail orderDetail = null;
+
+            using (var connection = ProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = ConnectionString;
+                connection.Open(); 
+                
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "select * from dbo.[Order Details] where OrderId=@orderId and ProductId=@prodId";
+                    command.AddParameter("@orderId", DbType.Int32, orderId);
+                    command.AddParameter("@prodId", DbType.Int32, productId);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            orderDetail = new OrderDetail()
+                            {
+                                OrderId = reader.SafeCastInt32(0),
+                                ProductId = reader.SafeCastInt32(1),
+                                UnitPrice = reader.SafeCastDecimal(2),
+                                Quantity = reader.SafeCastInt16(3),
+                                Discount = reader.SafeCastFloat(4)
+                            };
+                        }
+                    }
+                }
+            }
+
+            return orderDetail;
+        }
+
         public CustOrdersDetail GetCustOrderDetail(int orderId)
         {
             throw new NotImplementedException();

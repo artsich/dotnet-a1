@@ -10,7 +10,7 @@ namespace OrderManagement.DataAccess.Contract
 
         IList<T> GetCollection();
 
-        void Insert(T item);
+        T Insert(T item);
 
         void Update(T item);
 

@@ -1,9 +1,8 @@
 ﻿using OrderManagement.DataAccess.Contract.Interfaces;
 using OrderManagement.DataAccess.Contract.Models;
+using OrderManagement.DataAccess.Exceptions;
 using OrderManagement.Services.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace OrderManagement.Services
 {
@@ -18,25 +17,37 @@ namespace OrderManagement.Services
 
         public void Create(OrderDetail obj)
         {
-            GetById(obj.OrderId, obj.ProductId);
+            var detail = OrderDetailRepository.Get(obj.OrderId, obj.ProductId);
+            if (detail != null)
+            {
+                throw new InsertEntityException("Entity already exist.");
+            }
 
-            //sorry, just laziness write single method insert
             OrderDetailRepository.InsertDetailsInOrder(obj.OrderId, new List<OrderDetail> { obj });
         }
 
         public bool Delete(int orderId, int productId)
         {
-            throw new NotImplementedException();
+            var detail = OrderDetailRepository.Get(orderId, productId);
+
+            if (detail == null)
+            {
+                throw new NotFoundEntityException($"Order detail with orderId: {orderId}, productId: {productId}");
+            }
+
+            return OrderDetailRepository.Delete(orderId, productId);
         }
 
         public OrderDetail GetById(int orderId, int productId)
         {
-            throw new NotImplementedException();
-        }
+            var detail = OrderDetailRepository.Get(orderId, productId);
 
-        public IList<OrderDetail> GetCollection()
-        {
-            throw new NotImplementedException();
+            if (detail == null)
+            {
+                throw new NotFoundEntityException($"Order detail with orderId: {orderId}, productId: {productId}");
+            }
+
+            return detail;
         }
 
         public void Update(OrderDetail obj)

@@ -7,13 +7,13 @@ namespace OrderManagement.DataAccess.Contract.Models
     public enum OrderStatus
     {
         New = 0,
-        InWork = 1,
-        Completed = 2
+        InProgress = 1,
+        IsDone = 2
     }
 
     public class Order : BaseModel
     {
-        public OrderStatus Status { get; }
+        public OrderStatus Status { get; set; }
 
         public string CustomerId { get; set; }
 
@@ -42,6 +42,10 @@ namespace OrderManagement.DataAccess.Contract.Models
         public string ShipCountry { get; set; }
 
         public IList<OrderDetail> OrderDetails { get; set; }
+
+        public Order()
+        {
+        }
 
         public Order(DateTime? orderDate, DateTime? shippedDate, OrderStatus status)
         {

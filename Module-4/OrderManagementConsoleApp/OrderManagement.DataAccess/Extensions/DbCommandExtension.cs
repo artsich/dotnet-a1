@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 
 namespace OrderManagement.DataAccess.Extensions
@@ -10,7 +11,7 @@ namespace OrderManagement.DataAccess.Extensions
             var parameter = command.CreateParameter();
             parameter.ParameterName = name;
             parameter.DbType = type;
-            parameter.Value = value;
+            parameter.Value = value ?? DBNull.Value;
             command.Parameters.Add(parameter);
             return command;
         }

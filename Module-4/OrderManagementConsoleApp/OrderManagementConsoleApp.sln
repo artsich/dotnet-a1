@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagementConsoleApp", "OrderManagementConsoleApp\OrderManagementConsoleApp.csproj", "{FD07A221-23CF-4DEE-98B2-79B9A20F542C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.Services", "OrderManagement.Services\OrderManagement.Services.csproj", "{FC3BC50D-D72E-49D5-9773-640E70603AB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderManagement.Services", "OrderManagement.Services\OrderManagement.Services.csproj", "{FC3BC50D-D72E-49D5-9773-640E70603AB8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.DataAccess.Contract", "OrderManagement.DataAccess.Contract\OrderManagement.DataAccess.Contract.csproj", "{23C509B3-DC9A-46A0-8699-E90B5B8BE23F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.DataAccess", "OrderManagement.DataAccess\OrderManagement.DataAccess.csproj", "{D3BC05CC-3A2C-4CFF-B7EC-28068D9DD605}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.Tests", "OrderManagement.Tests\OrderManagement.Tests.csproj", "{EF872A95-12BB-4378-9F85-37F13299F62D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{D3BC05CC-3A2C-4CFF-B7EC-28068D9DD605}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3BC05CC-3A2C-4CFF-B7EC-28068D9DD605}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3BC05CC-3A2C-4CFF-B7EC-28068D9DD605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF872A95-12BB-4378-9F85-37F13299F62D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF872A95-12BB-4378-9F85-37F13299F62D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF872A95-12BB-4378-9F85-37F13299F62D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF872A95-12BB-4378-9F85-37F13299F62D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -59,7 +59,6 @@ namespace OrderManagement.DataAccess
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = GetByIdSql;
-
                     command.AddParameter(ParamIdName, DbType.Int32, guid);
 
                     using (var reader = command.ExecuteReader())
@@ -80,19 +79,60 @@ namespace OrderManagement.DataAccess
             return result;
         }
 
-        public override void Insert(Order item)
+        public override Order Insert(Order item)
         {
-            UpdateOrInsert(item, InsertSql);
+            using (var connection = ProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = InsertSql;
+                    PrepareInsertUpdateCommand(item, command);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            var orderId = reader.SafeCastInt32(0);
+                            item.Id = (int)orderId;
+                        }
+                        else
+                        {
+                            throw new Exception("Id of last record has not returned");
+                        }
+                    }
+
+                }
+            }
+
+            return item;
         }
 
         public override void Update(Order item)
         {
-            if (item.Status == OrderStatus.Completed || item.Status == OrderStatus.InWork)
+            if (item.Status == OrderStatus.IsDone || item.Status == OrderStatus.InProgress)
             {
-                throw new Exception("You can't update completed or is working order");
+                throw new Exception("You can't update `Completed` or `in work` order");
             }
 
-            UpdateOrInsert(item, UpdateSql);
+            using (var connection = ProviderFactory.CreateConnection())
+            {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = UpdateSql;
+                    PrepareInsertUpdateCommand(item, command);
+
+                    if (command.ExecuteNonQuery() == 0)
+                    {
+                        throw new Exception("yyyyyps");
+                    }
+                }
+            }
         }
 
         private void UpdateOrInsert(Order item, string sql)
@@ -105,25 +145,28 @@ namespace OrderManagement.DataAccess
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = sql;
-
-                    command.AddParameter("@custId", DbType.String, item.CustomerId)
-                            .AddParameter("@emplId", DbType.Int32, item.EmployeeId)
-                            .AddParameter("@reqDate", DbType.DateTime, item.RequiredDate)
-                            .AddParameter("@shipVia", DbType.Int32, item.ShipVia)
-                            .AddParameter("@freight", DbType.Decimal, item.Freight)
-                            .AddParameter("@shipName", DbType.String, item.ShipName)
-                            .AddParameter("@shipAddress", DbType.String, item.ShipAddress)
-                            .AddParameter("@shipCity", DbType.String, item.ShipCity)
-                            .AddParameter("@shipRegion", DbType.String, item.ShipRegion)
-                            .AddParameter("@shipPostalCode", DbType.String, item.ShipPostalCode)
-                            .AddParameter("@shipCntry", DbType.String, item.ShipCountry);
-
+                    PrepareInsertUpdateCommand(item, command);
                     if (command.ExecuteNonQuery() == 0)
                     {
                         throw new Exception("yyyyyps");
                     }
                 }
             }
+        }
+
+        private void PrepareInsertUpdateCommand(Order item, DbCommand command)
+        {
+            command.AddParameter("@custId", DbType.String, item.CustomerId);
+            command.AddParameter("@emplId", DbType.Int32, item.EmployeeId);
+            command.AddParameter("@reqDate", DbType.DateTime, item.RequiredDate);
+            command.AddParameter("@shipVia", DbType.Int32, item.ShipVia);
+            command.AddParameter("@freight", DbType.Decimal, item.Freight);
+            command.AddParameter("@shipName", DbType.String, item.ShipName);
+            command.AddParameter("@shipAddress", DbType.String, item.ShipAddress);
+            command.AddParameter("@shipCity", DbType.String, item.ShipCity);
+            command.AddParameter("@shipRegion", DbType.String, item.ShipRegion);
+            command.AddParameter("@shipPostalCode", DbType.String, item.ShipPostalCode);
+            command.AddParameter("@shipCntry", DbType.String, item.ShipCountry);
         }
 
         private void SetupDateInAttribute(int id, DateTime dateTime, string sql)

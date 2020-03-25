@@ -28,7 +28,7 @@ namespace OrderManagement.DataAccess
 
         protected abstract T FromReaderToObject(DbDataReader reader);
 
-        public abstract void Insert(T item);
+        public abstract T Insert(T item);
 
         public abstract void Update(T item);
 
