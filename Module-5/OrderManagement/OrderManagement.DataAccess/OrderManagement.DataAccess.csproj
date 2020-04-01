@@ -50,6 +50,7 @@
     <Compile Include="Extensions\DbProviderExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AbstractRepository.cs" />
+    <Compile Include="Repositories\OrderDetailRepo.cs" />
     <Compile Include="Repositories\EmployeeRepo.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
   </ItemGroup>

@@ -52,7 +52,7 @@ namespace OrderManagement.DataAccess.Repositories
                 {
                     try
                     {
-                        int id = connection.Insert<T>(item);
+                        int id = connection.Insert<T>(item, transaction: transaction);
                         transaction.Commit();
                         throw new NotImplementedException();
                         return item;
@@ -74,7 +74,7 @@ namespace OrderManagement.DataAccess.Repositories
                 {
                     try
                     {
-                        var result = connection.Update<T>(item);
+                        var isUpdated = connection.Update<T>(item, transaction: transaction);
                         transaction.Commit();
                         throw new NotImplementedException();
                     }

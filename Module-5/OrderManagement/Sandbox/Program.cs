@@ -20,6 +20,10 @@ namespace Sandbox
         {
             var repo = new ProductRepository(ConnectionString, "System.Data.SqlClient");
             var res = repo.GetAll();
+            int rows = repo.MoveProductToAnotherCategory(1, 2);
+
+            var repoOrder = new OrderDetailRepo(ConnectionString, "System.Data.SqlClient");
+            var isChanged = repoOrder.ReplaceProduct(11008, 33, 67);
 
             var repo1 = new EmployeeRepo(ConnectionString, "System.Data.SqlClient");
             var statList = repo1.GetStatByRegions();

@@ -10,7 +10,6 @@ namespace OrderManagement.DataAccess.Repositories
 {
     public class ProductRepository : AbstractRepository<Product>, IProductRepository
     {
-        #region sql
         private const string Sql_GetAll = @"
                     SELECT TOP (1000) P.[ProductID]
                         ,P.[ProductName]
@@ -41,7 +40,11 @@ namespace OrderManagement.DataAccess.Repositories
                     FROM [Northwind].[dbo].[Products] as P
                     inner join [dbo].Suppliers as S on S.SupplierID = P.SupplierID
                     inner join [dbo].Categories as C on C.CategoryID = P.CategoryID;";
-        #endregion
+
+        private const string Sql_MoveProductToAnotherCategory = @"
+            update [dbo].Products
+            set CategoryID = @toId
+            where CategoryID = @fromId;";
 
         public ProductRepository(string connectinString, string provider)
             : base(connectinString, provider)
@@ -62,6 +65,34 @@ namespace OrderManagement.DataAccess.Repositories
                     },
                     splitOn: "ProductID,SupplierID,CategoryID").ToList();
                 return result;
+            }
+        }
+
+        public int MoveProductToAnotherCategory(int fromCategoryId, int toCategoryId)
+        {
+            using (var connectinon = ProviderFactory.CreateConnection(ConnectionString))
+            {
+                using (var transaction = connectinon.BeginTransaction())
+                {
+                    try
+                    {
+                        var rows = connectinon.Execute(
+                            Sql_MoveProductToAnotherCategory, 
+                            new
+                            {
+                                @fromId = fromCategoryId,
+                                @toId = toCategoryId
+                            }, transaction: transaction);
+
+                        transaction.Commit();
+                        return rows;
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw e;
+                    }
+                }
             }
         }
     }
