@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OrderManagement.DataAccess.Contract.Models
+namespace OrderManagement.DataAccess.Contract.Models.Db
 {
     [Flags]
     public enum OrderStatus

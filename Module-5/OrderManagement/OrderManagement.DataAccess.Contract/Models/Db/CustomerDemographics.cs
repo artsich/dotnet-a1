@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OrderManagement.DataAccess.Contract.Models
+namespace OrderManagement.DataAccess.Contract.Models.Db
 {
     [Table("CustomerDemographics")]
     public class CustomerDemographic

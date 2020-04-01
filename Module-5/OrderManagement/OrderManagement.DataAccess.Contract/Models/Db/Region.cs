@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OrderManagement.DataAccess.Contract.Models
+namespace OrderManagement.DataAccess.Contract.Models.Db
 {
     [Table("Regions")]
     public class Region
@@ -11,5 +12,7 @@ namespace OrderManagement.DataAccess.Contract.Models
 
         [Column("RegionDescription")]
         public string RegionDescription { get; set; }
+
+        public IList<Territory> Territories { get; set; }
     }
 }

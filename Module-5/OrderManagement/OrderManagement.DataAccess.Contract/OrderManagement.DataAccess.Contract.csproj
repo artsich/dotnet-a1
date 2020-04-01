@@ -45,21 +45,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\CustomerDemo.cs" />
-    <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\CustomerDemographics.cs" />
-    <Compile Include="Models\Employee.cs" />
-    <Compile Include="Models\Order.cs" />
-    <Compile Include="Models\OrderDetail.cs" />
-    <Compile Include="Models\Product.cs" />
-    <Compile Include="Models\Region.cs" />
-    <Compile Include="Models\Shipper.cs" />
-    <Compile Include="Models\Supplier.cs" />
-    <Compile Include="Models\Territory.cs" />
+    <Compile Include="Interfaces\IEmployeeRepository.cs" />
+    <Compile Include="Interfaces\IProductRepository.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Models\Db\CustomerDemo.cs" />
+    <Compile Include="Models\Db\Category.cs" />
+    <Compile Include="Models\Db\CustomerDemographics.cs" />
+    <Compile Include="Models\Db\Employee.cs" />
+    <Compile Include="Models\Db\Order.cs" />
+    <Compile Include="Models\Db\OrderDetail.cs" />
+    <Compile Include="Models\Db\Product.cs" />
+    <Compile Include="Models\Db\Region.cs" />
+    <Compile Include="Models\Db\Shipper.cs" />
+    <Compile Include="Models\EmplShipWorked.cs" />
+    <Compile Include="Models\StatByRegion.cs" />
+    <Compile Include="Models\Db\Supplier.cs" />
+    <Compile Include="Models\Db\Territory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\Db\Customer.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

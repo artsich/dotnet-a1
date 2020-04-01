@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\OrderManagement.DataAccess.Contract\packages\Dapper.2.0.30\lib\net461\Dapper.dll</HintPath>
+      <HintPath>..\OrderManagement\packages\Dapper.2.0.30\lib\net461\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,9 +54,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OrderManagement.DataAccess.Contract\OrderManagement.DataAccess.Contract\OrderManagement.DataAccess.Contract.csproj">
+    <ProjectReference Include="..\OrderManagement.DataAccess.Contract\OrderManagement.DataAccess.Contract.csproj">
       <Project>{b29265e3-db04-42cd-8aa9-021c75db48e6}</Project>
       <Name>OrderManagement.DataAccess.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OrderManagement.DataAccess\OrderManagement.DataAccess.csproj">
+      <Project>{141a85db-bb9c-455a-b730-f6f79729a5f9}</Project>
+      <Name>OrderManagement.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

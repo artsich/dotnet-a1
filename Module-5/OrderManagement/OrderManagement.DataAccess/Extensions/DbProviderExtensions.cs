@@ -13,6 +13,8 @@ namespace OrderManagement.DataAccess.Extensions
         {
             var connection = factory.CreateConnection();
             connection.ConnectionString = connectionString;
+            connection.Open();
+
             return connection;
         }
     }

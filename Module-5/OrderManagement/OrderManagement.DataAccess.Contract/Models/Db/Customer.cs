@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OrderManagement.DataAccess.Contract.Models
+namespace OrderManagement.DataAccess.Contract.Models.Db
 {
     public class Customer
     {

@@ -1,14 +1,15 @@
 ﻿using OrderManagement.DataAccess.Contract.Models;
-using System;
+using OrderManagement.DataAccess.Contract.Models.Db;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrderManagement.DataAccess.Contract.Interfaces
 {
     public interface IEmployeeRepository : IRepository<Employee>
     {
+        IList<StatByRegion> GetStatByRegions();
 
+        IList<EmplShipWorked> GetEmplsWithShips();
+
+        IList<Employee> GetEmplManagedTerritories();
     }
 }
