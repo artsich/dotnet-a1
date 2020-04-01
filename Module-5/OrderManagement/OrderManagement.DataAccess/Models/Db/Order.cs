@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OrderManagement.DataAccess.Contract.Models.Db
+namespace OrderManagement.DataAccess.Models.Db
 {
     [Flags]
     public enum OrderStatus
@@ -12,11 +10,8 @@ namespace OrderManagement.DataAccess.Contract.Models.Db
         InProgress = 1,
         IsDone = 2
     }
-
-    [Table("Orders")]
     public class Order
     {
-        [Key]
         public int OrderID { get; set; }
         
         public OrderStatus Status

@@ -1,5 +1,4 @@
-﻿using Dapper;
-using DapperExtensions;
+﻿using DapperExtensions;
 using OrderManagement.DataAccess.Contract.Interfaces;
 using OrderManagement.DataAccess.Extensions;
 using System;
@@ -23,9 +22,12 @@ namespace OrderManagement.DataAccess.Repositories
             ProviderFactory = DbProviderFactories.GetFactory(providerName);
         }
 
-        public virtual void Delete(T item)
+        public virtual bool Delete(T item)
         {
-
+            using (var connection = ProviderFactory.CreateConnection(ConnectionString))
+            {
+                return connection.Delete(item);
+            }
         }
 
         public virtual T Get(int id)
@@ -46,27 +48,28 @@ namespace OrderManagement.DataAccess.Repositories
 
         public virtual T Insert(T item) 
         {
+            var tp = DapperExtensions.DapperExtensions.DefaultMapper;
+
             using (var connection = ProviderFactory.CreateConnection(ConnectionString))
             {
                 using (var transaction = connection.BeginTransaction())
                 {
                     try
                     {
-                        int id = connection.Insert<T>(item, transaction: transaction);
+                        connection.Insert<T>(item, transaction: transaction);
                         transaction.Commit();
-                        throw new NotImplementedException();
                         return item;
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         transaction.Rollback();
-                        return null;
+                        throw e;
                     }
                 }
             }
         }
 
-        public virtual void Update(T item)
+        public virtual bool Update(T item)
         {
             using (var connection = ProviderFactory.CreateConnection(ConnectionString))
             {
@@ -76,11 +79,12 @@ namespace OrderManagement.DataAccess.Repositories
                     {
                         var isUpdated = connection.Update<T>(item, transaction: transaction);
                         transaction.Commit();
-                        throw new NotImplementedException();
+                        return isUpdated;
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         transaction.Rollback();
+                        throw e;
                     }
                 }
             }

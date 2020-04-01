@@ -49,6 +49,7 @@
     <Compile Include="Interfaces\IOrderDetail.cs" />
     <Compile Include="Interfaces\IProductRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Models\Db\BaserEntity.cs" />
     <Compile Include="Models\Db\CustomerDemo.cs" />
     <Compile Include="Models\Db\Category.cs" />
     <Compile Include="Models\Db\CustomerDemographics.cs" />

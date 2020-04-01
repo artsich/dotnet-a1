@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace OrderManagement.DataAccess.Contract.Models.Db
+﻿namespace OrderManagement.DataAccess.Models.Db
 {
-    [Table("Territories")]
     public class Territory
     {
         public int TerritoryID { get; set; }

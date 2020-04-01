@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace OrderManagement.DataAccess.Contract.Models.Db
+﻿namespace OrderManagement.DataAccess.Models.Db
 {
-    public class Customer
+    public class Supplier
     {
-        public int CustomerID { get; set; }
+        public int SupplierID { get; set; }
 
         public string CompanyName { get; set; }
 
@@ -26,8 +24,6 @@ namespace OrderManagement.DataAccess.Contract.Models.Db
 
         public string Fax { get; set; }
 
-        public IList<CustomerDemo> CustomerDemos { get; set; }
-
-        public IList<CustomerDemographic> CustomerDemographics { get; set; }
+        public string HomePage { get; set; }
     }
 }

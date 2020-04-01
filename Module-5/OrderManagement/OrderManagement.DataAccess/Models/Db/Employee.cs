@@ -1,14 +1,11 @@
-﻿using System;
+﻿using DapperExtensions.Mapper;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OrderManagement.DataAccess.Contract.Models.Db
+namespace OrderManagement.DataAccess.Models.Db
 {
-    [Table("Employees")]
     public class Employee
     {
-        [Key]
         public int EmployeeId { get; set; }
 
         public string LastName { get; set; }
@@ -41,11 +38,30 @@ namespace OrderManagement.DataAccess.Contract.Models.Db
 
         public string Notes { get; set; }
 
-        [ForeignKey("ReportsTo")]
-        public int ReportsTo { get; set; }
+        public int? ReportsTo { get; set; }
 
         public string PhotoPath { get; set; }
 
         public IList<Territory> Territories { get; set; }
+
+        public Employee() 
+        {
+        }
+
+        public Employee(string firstName, string lastName)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+        }
+    }
+
+    public class EmployeeMapper : ClassMapper<Employee>
+    {
+        public EmployeeMapper()
+        {
+            Table("[dbo].[Employees]");
+            AutoMap();
+            UnMap(x => x.Territories);
+        }
     }
 }

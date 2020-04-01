@@ -38,6 +38,7 @@
       <HintPath>..\packages\DapperExtensions.1.6.3\lib\net45\DapperExtensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,17 +49,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\DbProviderExtensions.cs" />
+    <Compile Include="Interfaces\IEmployeeRepository.cs" />
+    <Compile Include="Interfaces\IOrderDetail.cs" />
+    <Compile Include="Interfaces\IProductRepository.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Models\Db\Category.cs" />
+    <Compile Include="Models\Db\Customer.cs" />
+    <Compile Include="Models\Db\CustomerDemo.cs" />
+    <Compile Include="Models\Db\CustomerDemographics.cs" />
+    <Compile Include="Models\Db\Employee.cs" />
+    <Compile Include="Models\Db\Order.cs" />
+    <Compile Include="Models\Db\OrderDetail.cs" />
+    <Compile Include="Models\Db\Product.cs" />
+    <Compile Include="Models\Db\Region.cs" />
+    <Compile Include="Models\Db\Shipper.cs" />
+    <Compile Include="Models\Db\Supplier.cs" />
+    <Compile Include="Models\Db\Territory.cs" />
+    <Compile Include="Models\EmplShipWorked.cs" />
+    <Compile Include="Models\StatByRegion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AbstractRepository.cs" />
     <Compile Include="Repositories\OrderDetailRepo.cs" />
     <Compile Include="Repositories\EmployeeRepo.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OrderManagement.DataAccess.Contract\OrderManagement.DataAccess.Contract.csproj">
-      <Project>{B29265E3-DB04-42CD-8AA9-021C75DB48E6}</Project>
-      <Name>OrderManagement.DataAccess.Contract</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

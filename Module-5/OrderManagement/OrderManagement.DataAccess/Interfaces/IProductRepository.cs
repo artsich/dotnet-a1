@@ -1,4 +1,4 @@
-﻿using OrderManagement.DataAccess.Contract.Models.Db;
+﻿using OrderManagement.DataAccess.Models.Db;
 
 namespace OrderManagement.DataAccess.Contract.Interfaces
 {

@@ -1,22 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace OrderManagement.DataAccess.Contract.Models.Db
+﻿namespace OrderManagement.DataAccess.Models.Db
 {
-    [Table("Products")]
     public class Product
     {
-        [Key]
         public int ProductID { get; set; }
 
         public string ProductName { get; set; }
 
-        [ForeignKey("SupplierID")]
         public int? SupplierID { get; set; }
 
         public Supplier Supplier { get; set; }
 
-        [ForeignKey("CategoryID")]
         public int? CategoryID { get; set; }
 
         public Category Category { get; set; }
