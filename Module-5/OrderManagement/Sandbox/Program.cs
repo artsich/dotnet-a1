@@ -59,8 +59,6 @@ namespace Sandbox
             //var pr1 = repo.Get(1);
             //repo.Insert(pr1);
 
-          //  repo.Insert(new Product() { ProductName = "box" });
-
             var products = new List<Product>()
             {
                 new Product() { ProductName="tea", CategoryID = 1, SupplierID = 2 },
