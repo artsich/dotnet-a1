@@ -71,7 +71,7 @@ namespace OrderManagement.DataAccess.Repositories
         {
         }
 
-        public IList<Product> GetWholeProducts()
+        public override IList<Product> GetWholeEntitiesList()
         {
             using (var connection = ProviderFactory.CreateConnection(ConnectionString))
             {

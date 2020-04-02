@@ -8,6 +8,8 @@ namespace OrderManagement.DataAccess.Interfaces
 
         IList<T> GetAll();
 
+        IList<T> GetWholeEntitiesList();
+
         T Insert(T item);
 
         void InsertMany(ICollection<T> entities);

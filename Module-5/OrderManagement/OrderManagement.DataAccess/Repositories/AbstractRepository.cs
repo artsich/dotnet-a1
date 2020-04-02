@@ -25,14 +25,6 @@ namespace OrderManagement.DataAccess.Repositories
             ProviderFactory = DbProviderFactories.GetFactory(providerName);
         }
 
-        public virtual bool Delete(T item)
-        {
-            using (var connection = ProviderFactory.CreateConnection(ConnectionString))
-            {
-                return connection.Delete(item);
-            }
-        }
-
         public virtual T Get(int id)
         {
             using (var connection = ProviderFactory.CreateConnection(ConnectionString))
@@ -46,6 +38,19 @@ namespace OrderManagement.DataAccess.Repositories
             using (var connection = ProviderFactory.CreateConnection(ConnectionString))
             {
                 return connection.GetList<T>().ToList();
+            }
+        }
+
+        public virtual IList<T> GetWholeEntitiesList()
+        {
+            return GetAll();
+        }
+
+        public virtual bool Delete(T item)
+        {
+            using (var connection = ProviderFactory.CreateConnection(ConnectionString))
+            {
+                return connection.Delete(item);
             }
         }
 

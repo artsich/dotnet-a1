@@ -93,7 +93,7 @@ namespace OrderManagement.DataAccess.Repositories
             }
         }
 
-        public IList<Employee> GetEmplManagedTerritories()
+        public override IList<Employee> GetWholeEntitiesList()
         {
             using (var connection = ProviderFactory.CreateConnection(ConnectionString))
             {

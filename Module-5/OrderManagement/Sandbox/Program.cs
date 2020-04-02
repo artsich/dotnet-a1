@@ -82,7 +82,7 @@ namespace Sandbox
             repo1.Update(emp);
             var statList = repo1.GetStatByRegions();
             var stattList = repo1.GetEmplsWithShips();
-            var sss = repo1.GetEmplManagedTerritories();
+            var sss = repo1.GetWholeEntitiesList();
         }
     }
 }

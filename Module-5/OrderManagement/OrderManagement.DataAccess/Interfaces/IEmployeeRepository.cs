@@ -10,7 +10,5 @@ namespace OrderManagement.DataAccess.Interfaces
         IList<StatByRegion> GetStatByRegions();
 
         IList<EmplShipWorked> GetEmplsWithShips();
-
-        IList<Employee> GetEmplManagedTerritories();
     }
 }
