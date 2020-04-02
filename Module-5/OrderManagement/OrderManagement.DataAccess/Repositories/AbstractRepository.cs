@@ -1,4 +1,5 @@
-﻿using DapperExtensions;
+﻿using Dapper;
+using DapperExtensions;
 using OrderManagement.DataAccess.Extensions;
 using OrderManagement.DataAccess.Interfaces;
 using System;
@@ -14,6 +15,8 @@ namespace OrderManagement.DataAccess.Repositories
         protected readonly string ConnectionString;
         protected readonly string ProviderName;
         protected readonly DbProviderFactory ProviderFactory;
+
+        protected virtual string Sql_InsertMany { get; }
 
         protected AbstractRepository(string connString, string providerName)
         {
@@ -110,10 +113,41 @@ namespace OrderManagement.DataAccess.Repositories
             }
         }
 
-        //each repo must implement this query.
         public virtual int TryInsertMany(ICollection<T> entities)
         {
-            throw new NotImplementedException();
+            if (entities == null || entities.Count == 0)
+                throw new ArgumentException("The list of entities null or empty.");
+
+            if (string.IsNullOrEmpty(Sql_InsertMany))
+                throw new Exception("Sql_InsertMany was not initialized.");
+
+            using (var connection = ProviderFactory.CreateConnection(ConnectionString))
+            {
+                using (var transaction = connection.BeginTransaction())
+                {
+                    var resultAffectedRows = 0;
+                    try
+                    {
+                        foreach (var entity in entities)
+                        {
+                            var affectedRows = connection.Execute(
+                                Sql_InsertMany,
+                                entity,
+                                transaction);
+
+                            resultAffectedRows += affectedRows > 0 ? affectedRows : 0;
+                        }
+
+                        transaction.Commit();
+                        return resultAffectedRows;
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw e;
+                    }
+                }
+            }
         }
     }
 }

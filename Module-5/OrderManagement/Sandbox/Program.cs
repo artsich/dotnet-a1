@@ -44,7 +44,7 @@ namespace Sandbox
             var terrs = new List<Territory>
             {
                 new Territory() { RegionId=1, TerritoryDescription = "dsadasdad", TerritoryID = "0001" },
-                new Territory() { RegionId=1, TerritoryDescription = "cs.go", TerritoryID = "0006" },
+                new Territory() { RegionId=1, TerritoryDescription = "rdr2", TerritoryID = "0007" },
                 new Territory() { RegionId=1, TerritoryDescription = "blblblbllb", TerritoryID = "000001" },
             };
             var affected = repo.TryInsertMany(terrs);

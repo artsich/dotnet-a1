@@ -2,7 +2,7 @@
 
 namespace OrderManagement.Services.Interfaces
 {
-    public interface IEmployeeService : IService<Employee>
+    public interface IProductService : IService<Product>
     {
     }
 }

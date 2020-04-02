@@ -33,5 +33,10 @@ namespace OrderManagement.Services
                 TerritoryRepo.TryInsertMany(empl.Territories);
             }
         }
+
+        public void InsertMany(Employee entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

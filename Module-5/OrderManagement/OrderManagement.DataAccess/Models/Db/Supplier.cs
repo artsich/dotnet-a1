@@ -1,4 +1,6 @@
-﻿namespace OrderManagement.DataAccess.Models.Db
+﻿using DapperExtensions.Mapper;
+
+namespace OrderManagement.DataAccess.Models.Db
 {
     public class Supplier
     {
@@ -25,5 +27,14 @@
         public string Fax { get; set; }
 
         public string HomePage { get; set; }
+    }
+
+    internal class SupplierMapper : ClassMapper<Supplier>
+    {
+        public SupplierMapper()
+        {
+            Table("[dbo].[Suppliers]");
+            AutoMap();
+        }
     }
 }
