@@ -2,6 +2,7 @@
 using OrderManagement.DataAccess.Models.Db;
 using OrderManagement.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace OrderManagement.Services
 {
@@ -34,7 +35,7 @@ namespace OrderManagement.Services
             }
         }
 
-        public void InsertMany(Employee entity)
+        public void InsertMany(IList<Employee> entity)
         {
             throw new NotImplementedException();
         }

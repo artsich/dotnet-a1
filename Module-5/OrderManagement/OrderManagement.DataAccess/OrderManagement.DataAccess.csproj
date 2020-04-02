@@ -50,10 +50,12 @@
   <ItemGroup>
     <Compile Include="Extensions\DbCommandExtension.cs" />
     <Compile Include="Extensions\DbProviderExtensions.cs" />
+    <Compile Include="Interfaces\ICategoryRepo.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />
     <Compile Include="Interfaces\IOrderDetail.cs" />
     <Compile Include="Interfaces\IProductRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\ISupplierRepo.cs" />
     <Compile Include="Interfaces\ITerritoryRepo.cs" />
     <Compile Include="Models\Db\Category.cs" />
     <Compile Include="Models\Db\Customer.cs" />
@@ -71,9 +73,11 @@
     <Compile Include="Models\StatByRegion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AbstractRepository.cs" />
+    <Compile Include="Repositories\CategoryRepo.cs" />
     <Compile Include="Repositories\OrderDetailRepo.cs" />
     <Compile Include="Repositories\EmployeeRepo.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
+    <Compile Include="Repositories\SupplierRepo.cs" />
     <Compile Include="Repositories\TerritoryRepo.cs" />
   </ItemGroup>
   <ItemGroup>

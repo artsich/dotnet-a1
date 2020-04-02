@@ -1,9 +1,11 @@
 ﻿using Dapper;
+using DapperExtensions;
 using OrderManagement.DataAccess.Extensions;
 using OrderManagement.DataAccess.Interfaces;
 using OrderManagement.DataAccess.Models.Db;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 
 namespace OrderManagement.DataAccess.Repositories
@@ -46,12 +48,30 @@ namespace OrderManagement.DataAccess.Repositories
             set CategoryID = @toId
             where CategoryID = @fromId;";
 
+        private const string Sql_TrySupplierInsert = @"
+            declare @isExist as int
+            set @isExist = (select count(SupplierID) from dbo.Suppliers where SupplierID=@SupplierID)
+            if @isExist = 0
+	            insert into dbo.Suppliers ([Address], City, CompanyName, ContactName, ContactTitle, Country, Fax, HomePage, Phone, PostalCode, Region)
+	            values (@Address, @City, @CompanyName, @ContactName, @ContactTitle, @Country, @Fax, @HomePage, @Phone, @PostalCode, @Region);
+            if @isExist = 0
+	            select convert(int, IDENT_CURRENT('dbo.Suppliers'));";
+
+        private const string Sql_TryCategoryInsert = @"
+            declare @isExist as int
+            set @isExist = (select count(CategoryID) from dbo.Categories where CategoryID=@CategoryID)
+            if @isExist = 0
+	            insert into dbo.Categories (CategoryName, [Description], Picture)
+	            values (@CategoryName, @Description, @Picture);
+            if @isExist = 0
+	            select convert(int, IDENT_CURRENT('dbo.Categories'));";
+
         public ProductRepository(string connectinString, string provider)
             : base(connectinString, provider)
         {
         }
 
-        public override IList<Product> GetAll()
+        public IList<Product> GetWholeProducts()
         {
             using (var connection = ProviderFactory.CreateConnection(ConnectionString))
             {
@@ -65,6 +85,66 @@ namespace OrderManagement.DataAccess.Repositories
                     },
                     splitOn: "ProductID,SupplierID,CategoryID").ToList();
                 return result;
+            }
+        }
+
+        public void InsertWhole(IList<Product> products)
+        {
+            void insertSuppliersAndSetId(IList<(Product p, Supplier s)> tuples, DbConnection conn, DbTransaction trans)
+            {
+                foreach(var (p, s) in tuples)
+                {
+                    var id = conn.ExecuteScalar<int?>(Sql_TrySupplierInsert, s, trans);
+                    if (id.HasValue)
+                    {
+                        s.SupplierID = id.Value;
+                        p.SupplierID = id.Value;
+                    }
+                }
+            }
+
+            void insertCustomersAndSetId(IList<(Product p, Category c)> tuples, DbConnection conn, DbTransaction trans)
+            {
+                foreach (var (p, c) in tuples)
+                {
+                    var id = conn.ExecuteScalar<int?>(Sql_TryCategoryInsert, c, trans);
+                    if (id.HasValue)
+                    {
+                        c.CategoryID = id.Value;
+                        p.CategoryID = id.Value;
+                    }
+                }
+            }
+
+            using (var connection = ProviderFactory.CreateConnection(ConnectionString))
+            {
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        var suppliers = products
+                            .Where(x => x.Supplier != null)
+                            .Select(x => (x, x.Supplier)).ToList();
+                        insertSuppliersAndSetId(suppliers, connection, transaction);
+
+                        var categories = products
+                            .Where(x => x.Category != null)
+                            .Select(x => (x, x.Category)).ToList();
+                        insertCustomersAndSetId(categories, connection, transaction);
+
+                        foreach(var prod in products)
+                        {
+                            connection.Insert(prod, transaction);
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw e;
+                    }
+                }
             }
         }
 

@@ -11,6 +11,11 @@ namespace OrderManagement.DataAccess.Models.Db
         public string Description { get; set; }
 
         public byte[] Picture { get; set; }
+
+        public Category(string categoryName)
+        {
+            CategoryName = categoryName;
+        }
     }
 
     internal class CategoryMapper : ClassMapper<Category>

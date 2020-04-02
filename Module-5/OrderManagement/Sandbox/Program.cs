@@ -13,7 +13,7 @@ namespace Sandbox
 
         static void Main(string[] args)
         {
-            TerritoryRepoTest();
+            ProductRepoTest();
             Console.ReadKey();
         }
 
@@ -54,10 +54,20 @@ namespace Sandbox
         static void ProductRepoTest()
         {
             var repo = new ProductRepository(ConnectionString, ProviderName);
-            var res = repo.GetAll();
-            int rows = repo.MoveProductToAnotherCategory(1, 2);
-            var pr1 = repo.Get(1);
-            repo.Insert(pr1);
+            //var res = repo.GetAll();
+            //int rows = repo.MoveProductToAnotherCategory(1, 2);
+            //var pr1 = repo.Get(1);
+            //repo.Insert(pr1);
+
+          //  repo.Insert(new Product() { ProductName = "box" });
+
+            var products = new List<Product>()
+            {
+                new Product() { ProductName="tea", CategoryID = 1, SupplierID = 2 },
+                new Product() { ProductName="cookie", Category = new Category("Vkusniahi"), Supplier = new Supplier() { ContactName = "Artsiom", CompanyName = "epam" } },
+            };
+
+            repo.InsertWhole(products);
         }
 
         static void OrderRepoTest()

@@ -16,7 +16,7 @@ namespace OrderManagement.DataAccess.Repositories
         protected readonly string ProviderName;
         protected readonly DbProviderFactory ProviderFactory;
 
-        protected virtual string Sql_InsertMany { get; }
+        protected virtual string Sql_TryInsertMany { get; }
 
         protected AbstractRepository(string connString, string providerName)
         {
@@ -51,15 +51,13 @@ namespace OrderManagement.DataAccess.Repositories
 
         public virtual T Insert(T item)
         {
-            var tp = DapperExtensions.DapperExtensions.DefaultMapper;
-
             using (var connection = ProviderFactory.CreateConnection(ConnectionString))
             {
                 using (var transaction = connection.BeginTransaction())
                 {
                     try
                     {
-                        connection.Insert<T>(item, transaction: transaction);
+                        connection.Insert(item, transaction: transaction);
                         transaction.Commit();
                         return item;
                     }
@@ -80,7 +78,7 @@ namespace OrderManagement.DataAccess.Repositories
                 {
                     try
                     {
-                        connection.Insert<T>(entities, transaction);
+                        connection.Insert(entities, transaction);
                         transaction.Commit();
                     }
                     catch (Exception e)
@@ -100,7 +98,7 @@ namespace OrderManagement.DataAccess.Repositories
                 {
                     try
                     {
-                        var isUpdated = connection.Update<T>(item, transaction: transaction);
+                        var isUpdated = connection.Update(item, transaction: transaction);
                         transaction.Commit();
                         return isUpdated;
                     }
@@ -118,7 +116,7 @@ namespace OrderManagement.DataAccess.Repositories
             if (entities == null || entities.Count == 0)
                 throw new ArgumentException("The list of entities null or empty.");
 
-            if (string.IsNullOrEmpty(Sql_InsertMany))
+            if (string.IsNullOrEmpty(Sql_TryInsertMany))
                 throw new Exception("Sql_InsertMany was not initialized.");
 
             using (var connection = ProviderFactory.CreateConnection(ConnectionString))
@@ -131,7 +129,7 @@ namespace OrderManagement.DataAccess.Repositories
                         foreach (var entity in entities)
                         {
                             var affectedRows = connection.Execute(
-                                Sql_InsertMany,
+                                Sql_TryInsertMany,
                                 entity,
                                 transaction);
 

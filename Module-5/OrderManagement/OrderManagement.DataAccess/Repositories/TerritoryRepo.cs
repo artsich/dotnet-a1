@@ -5,7 +5,7 @@ namespace OrderManagement.DataAccess.Repositories
 {
     public class TerritoryRepo : AbstractRepository<Territory>, ITerritoryRepo
     {
-        protected override string Sql_InsertMany => @"
+        protected override string Sql_TryInsertMany => @"
             if not exists (select * from dbo.Territories where TerritoryID=@TerritoryID)
 	            insert into dbo.Territories (TerritoryID, TerritoryDescription, RegionID)
 	            values (@TerritoryID, @TerritoryDescription, @RegionID);";
