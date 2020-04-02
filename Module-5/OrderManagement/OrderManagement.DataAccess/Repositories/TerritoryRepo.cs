@@ -10,9 +10,9 @@ namespace OrderManagement.DataAccess.Repositories
     public class TerritoryRepo : AbstractRepository<Territory>, ITerritoryRepo
     {
         private const string Sql_TryAddTerritories = @"
-            if not exists (select * from dbo.Territories where TerritoryID=@id)
+            if not exists (select * from dbo.Territories where TerritoryID=@TerritoryID)
 	            insert into dbo.Territories (TerritoryID, TerritoryDescription, RegionID)
-	            values (@id, @desc, @regId);";
+	            values (@TerritoryID, @TerritoryDescription, @RegionID);";
 
         public TerritoryRepo(string connString, string providerName)
             : base(connString, providerName)
@@ -34,14 +34,9 @@ namespace OrderManagement.DataAccess.Repositories
                         foreach(var entity in entities)
                         {
                             var affectedRows = connection.Execute(
-                                Sql_TryAddTerritories, 
-                                new
-                                {
-                                    @id = entity.TerritoryID,
-                                    @desc = entity.TerritoryDescription,
-                                    @regId = entity.RegionId
-                                }, 
-                                transaction: transaction);
+                                Sql_TryAddTerritories,
+                                entity,
+                                transaction);
 
                             resultAffectedRows += affectedRows > 0 ? affectedRows : 0;
                         }
