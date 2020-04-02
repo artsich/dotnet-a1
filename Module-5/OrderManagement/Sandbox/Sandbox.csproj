@@ -61,6 +61,10 @@
       <Project>{141a85db-bb9c-455a-b730-f6f79729a5f9}</Project>
       <Name>OrderManagement.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OrderManagement.Services\OrderManagement.Services.csproj">
+      <Project>{de0eddb1-f22a-47db-af3b-7fe834f139d4}</Project>
+      <Name>OrderManagement.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

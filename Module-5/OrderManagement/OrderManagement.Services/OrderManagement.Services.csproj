@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B29265E3-DB04-42CD-8AA9-021C75DB48E6}</ProjectGuid>
+    <ProjectGuid>{DE0EDDB1-F22A-47DB-AF3B-7FE834F139D4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OrderManagement.DataAccess.Contract</RootNamespace>
-    <AssemblyName>OrderManagement.DataAccess.Contract</AssemblyName>
+    <RootNamespace>OrderManagement.Services</RootNamespace>
+    <AssemblyName>OrderManagement.Services</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,11 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.2.0.30\lib\net461\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,29 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IEmployeeRepository.cs" />
-    <Compile Include="Interfaces\IOrderDetail.cs" />
-    <Compile Include="Interfaces\IProductRepository.cs" />
-    <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Models\Db\BaserEntity.cs" />
-    <Compile Include="Models\Db\CustomerDemo.cs" />
-    <Compile Include="Models\Db\Category.cs" />
-    <Compile Include="Models\Db\CustomerDemographics.cs" />
-    <Compile Include="Models\Db\Employee.cs" />
-    <Compile Include="Models\Db\Order.cs" />
-    <Compile Include="Models\Db\OrderDetail.cs" />
-    <Compile Include="Models\Db\Product.cs" />
-    <Compile Include="Models\Db\Region.cs" />
-    <Compile Include="Models\Db\Shipper.cs" />
-    <Compile Include="Models\EmplShipWorked.cs" />
-    <Compile Include="Models\StatByRegion.cs" />
-    <Compile Include="Models\Db\Supplier.cs" />
-    <Compile Include="Models\Db\Territory.cs" />
+    <Compile Include="EmplService.cs" />
+    <Compile Include="Interfaces\IEmployeeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Db\Customer.cs" />
-    <None Include="packages.config" />
+    <ProjectReference Include="..\OrderManagement.DataAccess\OrderManagement.DataAccess.csproj">
+      <Project>{141a85db-bb9c-455a-b730-f6f79729a5f9}</Project>
+      <Name>OrderManagement.DataAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

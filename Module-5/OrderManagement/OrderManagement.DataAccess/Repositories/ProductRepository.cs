@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using OrderManagement.DataAccess.Contract.Interfaces;
 using OrderManagement.DataAccess.Extensions;
+using OrderManagement.DataAccess.Interfaces;
 using OrderManagement.DataAccess.Models.Db;
 using System;
 using System.Collections.Generic;
@@ -77,7 +77,7 @@ namespace OrderManagement.DataAccess.Repositories
                     try
                     {
                         var rows = connectinon.Execute(
-                            Sql_MoveProductToAnotherCategory, 
+                            Sql_MoveProductToAnotherCategory,
                             new
                             {
                                 @fromId = fromCategoryId,

@@ -1,4 +1,6 @@
-﻿namespace OrderManagement.DataAccess.Models.Db
+﻿using DapperExtensions.Mapper;
+
+namespace OrderManagement.DataAccess.Models.Db
 {
     public class Product
     {
@@ -24,6 +26,17 @@
 
         public short? ReorderLevel { get; set; }
 
-        public bool Discountined { get; set; }
+        public bool Discontinued { get; set; }
+    }
+
+    internal class ProductMapper : ClassMapper<Product>
+    {
+        public ProductMapper()
+        {
+            Table("[dbo].[Products]");
+            AutoMap();
+            UnMap(x => x.Supplier);
+            UnMap(x => x.Category);
+        }
     }
 }

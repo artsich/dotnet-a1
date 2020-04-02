@@ -48,11 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DbCommandExtension.cs" />
     <Compile Include="Extensions\DbProviderExtensions.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />
     <Compile Include="Interfaces\IOrderDetail.cs" />
     <Compile Include="Interfaces\IProductRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\ITerritoryRepo.cs" />
     <Compile Include="Models\Db\Category.cs" />
     <Compile Include="Models\Db\Customer.cs" />
     <Compile Include="Models\Db\CustomerDemo.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="Repositories\OrderDetailRepo.cs" />
     <Compile Include="Repositories\EmployeeRepo.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
+    <Compile Include="Repositories\TerritoryRepo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

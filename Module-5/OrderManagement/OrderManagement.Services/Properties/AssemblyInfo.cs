@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OrderManagement.DataAccess.Contract")]
+[assembly: AssemblyTitle("OrderManagement.Services")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("EPAM Systems")]
-[assembly: AssemblyProduct("OrderManagement.DataAccess.Contract")]
+[assembly: AssemblyProduct("OrderManagement.Services")]
 [assembly: AssemblyCopyright("Copyright © EPAM Systems 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("b29265e3-db04-42cd-8aa9-021c75db48e6")]
+[assembly: Guid("de0eddb1-f22a-47db-af3b-7fe834f139d4")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -1,6 +1,6 @@
 ﻿using DapperExtensions;
-using OrderManagement.DataAccess.Contract.Interfaces;
 using OrderManagement.DataAccess.Extensions;
+using OrderManagement.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -46,7 +46,7 @@ namespace OrderManagement.DataAccess.Repositories
             }
         }
 
-        public virtual T Insert(T item) 
+        public virtual T Insert(T item)
         {
             var tp = DapperExtensions.DapperExtensions.DefaultMapper;
 
@@ -59,6 +59,26 @@ namespace OrderManagement.DataAccess.Repositories
                         connection.Insert<T>(item, transaction: transaction);
                         transaction.Commit();
                         return item;
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw e;
+                    }
+                }
+            }
+        }
+
+        public virtual void InsertMany(ICollection<T> entities)
+        {
+            using (var connection = ProviderFactory.CreateConnection(ConnectionString))
+            {
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        connection.Insert<T>(entities, transaction);
+                        transaction.Commit();
                     }
                     catch (Exception e)
                     {
@@ -88,6 +108,12 @@ namespace OrderManagement.DataAccess.Repositories
                     }
                 }
             }
+        }
+
+        //each repo must implement this query.
+        public virtual int TryInsertMany(ICollection<T> entities)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace OrderManagement.DataAccess.Contract.Interfaces
+﻿namespace OrderManagement.DataAccess.Interfaces
 {
     public interface IOrderDetailRepo
     {

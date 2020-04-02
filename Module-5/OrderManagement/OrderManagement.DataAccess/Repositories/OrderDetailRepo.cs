@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using OrderManagement.DataAccess.Contract.Interfaces;
 using OrderManagement.DataAccess.Extensions;
+using OrderManagement.DataAccess.Interfaces;
 using System;
 using System.Data.Common;
 

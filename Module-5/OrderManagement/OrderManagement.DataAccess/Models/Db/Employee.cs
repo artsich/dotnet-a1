@@ -55,7 +55,7 @@ namespace OrderManagement.DataAccess.Models.Db
         }
     }
 
-    public class EmployeeMapper : ClassMapper<Employee>
+    internal class EmployeeMapper : ClassMapper<Employee>
     {
         public EmployeeMapper()
         {

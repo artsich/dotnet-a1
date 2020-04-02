@@ -1,7 +1,7 @@
 ﻿using Dapper;
-using OrderManagement.DataAccess.Contract.Interfaces;
 using OrderManagement.DataAccess.Contract.Models;
 using OrderManagement.DataAccess.Extensions;
+using OrderManagement.DataAccess.Interfaces;
 using OrderManagement.DataAccess.Models;
 using OrderManagement.DataAccess.Models.Db;
 using System.Collections.Generic;

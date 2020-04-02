@@ -3,7 +3,7 @@ using OrderManagement.DataAccess.Models;
 using OrderManagement.DataAccess.Models.Db;
 using System.Collections.Generic;
 
-namespace OrderManagement.DataAccess.Contract.Interfaces
+namespace OrderManagement.DataAccess.Interfaces
 {
     public interface IEmployeeRepository : IRepository<Employee>
     {

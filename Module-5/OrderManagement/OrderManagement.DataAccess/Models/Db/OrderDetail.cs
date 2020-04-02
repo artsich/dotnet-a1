@@ -1,4 +1,6 @@
-﻿namespace OrderManagement.DataAccess.Models.Db
+﻿using DapperExtensions.Mapper;
+
+namespace OrderManagement.DataAccess.Models.Db
 {
     public class OrderDetail
     {
@@ -15,5 +17,16 @@
         public short Quantity { get; set; }
 
         public float Discount { get; set; }
+    }
+
+    internal class OrderDetailMapping : ClassMapper<OrderDetail>
+    {
+        public OrderDetailMapping()
+        {
+            Table("[dbo].[Order Details]");
+            AutoMap();
+            UnMap(x => x.Order);
+            UnMap(x => x.Product);
+        }
     }
 }
