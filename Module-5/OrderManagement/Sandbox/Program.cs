@@ -14,7 +14,7 @@ namespace Sandbox
 
         static void Main(string[] args)
         {
-            EmplServiceTest();
+            TerritoryRepoTest();
             Console.ReadKey();
         }
 
@@ -45,7 +45,7 @@ namespace Sandbox
             var terrs = new List<Territory>
             {
                 new Territory() { RegionId=1, TerritoryDescription = "dsadasdad", TerritoryID = "0001" },
-                new Territory() { RegionId=1, TerritoryDescription = "dsadasdad", TerritoryID = "0002" },
+                new Territory() { RegionId=1, TerritoryDescription = "netflix", TerritoryID = "0005" },
                 new Territory() { RegionId=1, TerritoryDescription = "blblblbllb", TerritoryID = "000001" },
             };
             var affected = repo.TryInsertMany(terrs);

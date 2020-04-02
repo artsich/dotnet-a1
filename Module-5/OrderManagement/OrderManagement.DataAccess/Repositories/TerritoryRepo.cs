@@ -3,14 +3,17 @@ using OrderManagement.DataAccess.Extensions;
 using OrderManagement.DataAccess.Interfaces;
 using OrderManagement.DataAccess.Models.Db;
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 
 namespace OrderManagement.DataAccess.Repositories
 {
     public class TerritoryRepo : AbstractRepository<Territory>, ITerritoryRepo
     {
+        private const string Sql_TryAddTerritories = @"
+            if not exists (select * from dbo.Territories where TerritoryID=@id)
+	            insert into dbo.Territories (TerritoryID, TerritoryDescription, RegionID)
+	            values (@id, @desc, @regId);";
+
         public TerritoryRepo(string connString, string providerName)
             : base(connString, providerName)
         {
@@ -25,29 +28,26 @@ namespace OrderManagement.DataAccess.Repositories
             {
                 using (var transaction = connection.BeginTransaction())
                 {
-                    var affectedRows = 0;
+                    var resultAffectedRows = 0;
                     try
                     {
-                        var queryBuilder = new StringBuilder();
-                        var command = connection.CreateCommand();
-
-                        for (var i = 0; i < entities.Count; ++i)
+                        foreach(var entity in entities)
                         {
-                            queryBuilder.AppendLine($@"
-                                if not exists(select * from dbo.Territories where TerritoryID = @id_{i})
-                                    insert into dbo.Territories(TerritoryID, TerritoryDescription, RegionID)
-                                    values(@id_{i}, @desc_{i}, @regId_{i});");
+                            var affectedRows = connection.Execute(
+                                Sql_TryAddTerritories, 
+                                new
+                                {
+                                    @id = entity.TerritoryID,
+                                    @desc = entity.TerritoryDescription,
+                                    @regId = entity.RegionId
+                                }, 
+                                transaction: transaction);
 
-                            command.AddParameter($"@id_{i}", System.Data.DbType.String, entities.ElementAt(i).TerritoryID);
-                            command.AddParameter($"@desc_{i}", System.Data.DbType.String, entities.ElementAt(i).TerritoryDescription);
-                            command.AddParameter($"@regId_{i}", System.Data.DbType.Int32, entities.ElementAt(i).RegionId);
+                            resultAffectedRows += affectedRows > 0 ? affectedRows : 0;
                         }
-                        command.CommandText = queryBuilder.ToString();
-                        command.Transaction = transaction;
-                        affectedRows = command.ExecuteNonQuery();
-                        transaction.Commit();
 
-                        return affectedRows < 0 ? 0 : affectedRows;
+                        transaction.Commit();
+                        return resultAffectedRows;
                     }
                     catch (Exception e)
                     {
