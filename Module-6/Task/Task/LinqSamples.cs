@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using SampleSupport;
@@ -22,7 +23,6 @@ namespace SampleQueries
 	[Prefix("Linq")]
 	public class LinqSamples : SampleHarness
 	{
-
 		private DataSource dataSource = new DataSource();
 
 		[Category("Restriction Operators")]
@@ -77,6 +77,14 @@ namespace SampleQueries
 		[Description("Для каждого клиента составьте список поставщиков, находящихся в той же стране и том же городе. Сделайте задания с использованием группировки и без")]
 		public void Linq2()
 		{
+			var query = dataSource.Customers
+					.Select(x => new
+					{
+						Customer = x,
+						Suppliers = dataSource.Suppliers.Where(s => s.City == x.City && s.Country == x.Country)
+					});
+			//TODO: MAKE WITH GROUP
+			Dump(query);
 		}
 
 		[Category("Restriction Operators")]
@@ -128,6 +136,95 @@ namespace SampleQueries
 				x.Date,
 				Total = x.Customer.Orders.Sum(o => o.Total)
 			}));
+		}
+
+		[Category("Restriction Operators")]
+		[Title("Where - Task 6")]
+		[Description("Укажите всех клиентов, у которых указан нецифровой почтовый код или не заполнен регион или в телефоне не указан код оператора (для простоты считаем, что это равнозначно «нет круглых скобочек в начале")]
+		public void Linq6()
+		{
+			var query = dataSource.Customers
+				.Where(c => 
+					!Regex.IsMatch(c.PostalCode ?? string.Empty, @"\d*") 
+				||	string.IsNullOrEmpty(c.Region) 
+				||	!c.Phone.StartsWith("("));
+
+			Dump(query);
+		}
+
+		[Category("Restriction Operators")]
+		[Title("Where - Task 7")]
+		[Description("Сгруппируйте все продукты по категориям, внутри – по наличию на складе, внутри последней группы отсортируйте по стоимости")]
+		public void Linq7()
+		{
+			var query = dataSource.Products
+				.GroupBy(x => new { x.Category, x.UnitsInStock });
+			
+			Dump(query);
+		}
+
+		[Category("Restriction Operators")]
+		[Title("Where - Task 8")]
+		[Description("Сгруппируйте товары по группам «дешевые», «средняя цена», «дорогие». Границы каждой группы задайте сами")]
+		public void Linq8()
+		{
+			var query = dataSource.Products
+				.GroupBy(x => new { x.Category, x.UnitsInStock });
+
+			Dump(query);
+		}
+
+		[Category("Restriction Operators")]
+		[Title("Where - Task9")]
+		[Description("Рассчитайте среднюю прибыльность каждого города (среднюю сумму заказа по всем клиентам из данного города) и среднюю интенсивность (среднее количество заказов, приходящееся на клиента из каждого города)")]
+		public void Linq9()
+		{
+			var query = dataSource.Customers
+				.GroupBy(x => x.City)
+				.Select(x => new
+				{ 
+					City = x.Key, 
+					AverageRevenue = x.Average(c => c.Orders.Sum(o => o.Total)),
+					AverageInensity = dataSource.Customers
+													.Where(c => c.City == x.Key)
+													.Average(c => c.Orders.Count())
+				});
+
+			Dump(query);
+		}
+
+		[Category("Restriction Operators")]
+		[Title("Where - Task10")]
+		[Description("Сделайте среднегодовую статистику активности клиентов по месяцам (без учета года), статистику по годам, по годам и месяцам (т.е. когда один месяц в разные годы имеет своё значение).")]
+		public void Linq10()
+		{
+			var query = dataSource.Customers
+				.Select(x => new
+				{
+					Customer = x,
+					StatByMonth = x.Orders
+									.GroupBy(o => o.OrderDate.Month)
+									.Select(g => new { Month = g.Key, Count = g.Count() }),
+
+					StatByYear = x.Orders
+									.GroupBy(o => o.OrderDate.Year)
+									.Select(g => new { Year = g.Key, Count = g.Count() }),
+
+					StatByYearMonth = x.Orders
+											.GroupBy(o => new 
+											{ 
+												o.OrderDate.Year,
+												o.OrderDate.Month,
+											})
+											.Select(g => new
+											{
+												g.Key.Year,
+												g.Key.Month,
+												Count = g.Count()
+											})
+				});
+
+			Dump(query);
 		}
 
 		private void Dump(IEnumerable<object> iter)

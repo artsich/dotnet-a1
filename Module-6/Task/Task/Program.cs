@@ -23,14 +23,13 @@ namespace SampleQueries
 		static void Main(string[] args)
 		{
 			List<SampleHarness> harnesses = new List<SampleHarness>();
-
 			
 			LinqSamples linqHarness = new LinqSamples();
 			harnesses.Add(linqHarness);
 						
 			Application.EnableVisualStyles();
 				
-			using (SampleForm form = new SampleForm("HomeWork - Mihail Romanov", harnesses))
+			using (SampleForm form = new SampleForm("HomeWork - Artsiom Dubinevich", harnesses))
 			{
 				form.ShowDialog();
 			}
