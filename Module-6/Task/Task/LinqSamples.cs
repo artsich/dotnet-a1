@@ -71,7 +71,6 @@ namespace SampleQueries
 			Dump(query);
 		}
 
-
 		[Category("Restriction Operators")]
 		[Title("Where - Task 2")]
 		[Description("Для каждого клиента составьте список поставщиков, находящихся в той же стране и том же городе. Сделайте задания с использованием группировки и без")]
@@ -158,9 +157,18 @@ namespace SampleQueries
 		public void Linq7()
 		{
 			var query = dataSource.Products
-				.GroupBy(x => new { x.Category, x.UnitsInStock });
-			
+				.OrderBy(x => x.UnitsInStock)
+				.ThenBy(x => x.UnitPrice)
+				.GroupBy(x => x.Category);
+
 			Dump(query);
+		}
+
+		public enum CostType 
+		{
+			Chipper,
+			Average,
+			Expensive
 		}
 
 		[Category("Restriction Operators")]
@@ -168,10 +176,27 @@ namespace SampleQueries
 		[Description("Сгруппируйте товары по группам «дешевые», «средняя цена», «дорогие». Границы каждой группы задайте сами")]
 		public void Linq8()
 		{
-			var query = dataSource.Products
-				.GroupBy(x => new { x.Category, x.UnitsInStock });
+			var chipperIfLess = 5;
+			var lessChipperIfLess = 15;
 
-			Dump(query);
+			var query = dataSource.Products
+				.Select(p => new
+				{
+					Product = p,
+					Type = p.UnitPrice < chipperIfLess ? CostType.Chipper :
+							p.UnitPrice < lessChipperIfLess ? CostType.Average : CostType.Expensive
+				})
+				.GroupBy(x => x.Type);
+
+			//select() here for beautify output.
+			Dump(query
+				.SelectMany(x => x.ToList())
+				.Select(x => new 
+				{ 
+					x.Type, 
+					x.Product.ProductName, 
+					x.Product.UnitPrice 
+				}));
 		}
 
 		[Category("Restriction Operators")]
