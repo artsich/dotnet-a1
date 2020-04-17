@@ -18,17 +18,20 @@ namespace Crawler
 
         public async Task Start()
         {
-            //var crawler = new HtmlCrawler(new HttpProvider());
-            var crawler = new HtmlCrawler(new FileSystemProvider());
-            await crawler.ParseFromUrl(@"C:\Users\Artsiom_Dubinevich\Desktop\New folder (3)", "index.html", "sample");
+            var crawler = new HtmlCrawler(new HttpProvider());
+            var result = crawler.Parse(new HtmlCrawlerSetting()
+            {
+                MaxDeep = Options.AnalyzeDeep,
+                RootUri = @"http://ru.simplesite.com/",
+                SaveDir = Options.DestinationFolder
+            }, "");
 
             return;
-
+            
             Console.Write("Enter url: ");
             var url = Console.ReadLine();
-
-//            var parsedElements = await crawler.ParseFromUrl(url, Options.DestinationFolder);
-
+            
+            //var parsedElements = await crawler.ParseFromUrl(url, Options.DestinationFolder);
             //Directory.CreateDirectory(Options.DestinationFolder);
             //foreach(var el in parsedElements)
             {

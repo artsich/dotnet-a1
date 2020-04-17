@@ -10,7 +10,8 @@ namespace Crawler.Core
 
         public async Task<string> GetFrom(string url)
         {
-            var response = await Client.GetAsync(new Uri(url));
+            var uri = new Uri(url);
+            var response = await Client.GetAsync(uri);
             response.EnsureSuccessStatusCode();
             string responceBody = await response.Content.ReadAsStringAsync();
             return responceBody;
