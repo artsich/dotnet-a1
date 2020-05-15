@@ -62,7 +62,7 @@ namespace SampleQueries
 		}
 
 		[Category("Restriction Operators")]
-		[Title("Where - Task 1")]
+		[Title("Where - Task 1 with X = 40020")]
 		[Description("Выдайте список всех клиентов, чей суммарный оборот (сумма всех заказов) превосходит некоторую величину X. Продемонстрируйте выполнение запроса с различными X")]
 		public void Linq1()
 		{
@@ -72,7 +72,17 @@ namespace SampleQueries
 		}
 
 		[Category("Restriction Operators")]
-		[Title("Where - Task 2")]
+		[Title("Where - Task 1 with X = 20020")]
+		[Description("Выдайте список всех клиентов, чей суммарный оборот (сумма всех заказов) превосходит некоторую величину X. Продемонстрируйте выполнение запроса с различными X")]
+		public void Linq1_2()
+		{
+			var total = 20020;
+			var query = dataSource.Customers.Where(x => x.Orders.Sum(o => o.Total) > total);
+			Dump(query);
+		}
+
+		[Category("Restriction Operators")]
+		[Title("Where - Task 2 - w/o - group")]
 		[Description("Для каждого клиента составьте список поставщиков, находящихся в той же стране и том же городе. Сделайте задания с использованием группировки и без")]
 		public void Linq2()
 		{
@@ -80,9 +90,26 @@ namespace SampleQueries
 					.Select(x => new
 					{
 						Customer = x,
-						Suppliers = dataSource.Suppliers.Where(s => s.City == x.City && s.Country == x.Country)
+						Suppliers = dataSource.Suppliers.Where(s => s.City == x.City && s.Country == x.Country).ToList()
 					});
-			//TODO: MAKE WITH GROUP
+
+			Dump(query);
+		}
+
+		[Category("Restriction Operators")]
+		[Title("Where - Task 2 - group")]
+		[Description("Для каждого клиента составьте список поставщиков, находящихся в той же стране и том же городе.")]
+		public void Linq2_group()
+		{
+			var query = dataSource.Customers.
+				GroupJoin(dataSource.Suppliers,
+						x => new { x.City, x.Country },
+						s => new { s.City, s.Country }, (cus, supls) => new
+						{
+							Customer = cus,
+							Supliers = supls.ToList()
+						});
+
 			Dump(query);
 		}
 
