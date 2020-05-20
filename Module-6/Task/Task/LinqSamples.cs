@@ -62,23 +62,20 @@ namespace SampleQueries
 		}
 
 		[Category("Restriction Operators")]
-		[Title("Where - Task 1 with X = 40020")]
+		[Title("Where - Task 1")]
 		[Description("Выдайте список всех клиентов, чей суммарный оборот (сумма всех заказов) превосходит некоторую величину X. Продемонстрируйте выполнение запроса с различными X")]
 		public void Linq1()
 		{
-			var total = 40020;
-			var query = dataSource.Customers.Where(x => x.Orders.Sum(o => o.Total) > total);
+			var query = Get_1(40041);
+			Dump(query);
+
+			query = Get_1(20041);
 			Dump(query);
 		}
 
-		[Category("Restriction Operators")]
-		[Title("Where - Task 1 with X = 20020")]
-		[Description("Выдайте список всех клиентов, чей суммарный оборот (сумма всех заказов) превосходит некоторую величину X. Продемонстрируйте выполнение запроса с различными X")]
-		public void Linq1_2()
+		private IEnumerable<Customer> Get_1(int total)
 		{
-			var total = 20020;
-			var query = dataSource.Customers.Where(x => x.Orders.Sum(o => o.Total) > total);
-			Dump(query);
+			return dataSource.Customers.Where(x => x.Orders.Sum(o => o.Total) > total);
 		}
 
 		[Category("Restriction Operators")]
