@@ -63,6 +63,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CustomSerializer\OrderIDataContractSurrogate.cs" />
+    <Compile Include="CustomSerializer\OrderDetailSerializerSurrogate.cs" />
     <Compile Include="DB\Category.cs" />
     <Compile Include="DB\Customer.cs" />
     <Compile Include="DB\CustomerDemographic.cs" />

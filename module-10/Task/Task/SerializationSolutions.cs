@@ -5,6 +5,8 @@ using Task.TestHelpers;
 using System.Runtime.Serialization;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters;
+using Task.CustomSerializer;
 
 namespace Task
 {
@@ -50,9 +52,27 @@ namespace Task
 		{
 			dbContext.Configuration.ProxyCreationEnabled = false;
 
-			var tester = new XmlDataContractSerializerTester<IEnumerable<Order_Detail>>(new NetDataContractSerializer(), true);
-			var orderDetails = dbContext.Order_Details.ToList();
+			var streamingContext = new StreamingContext(StreamingContextStates.All, dbContext);
+			var surrogateSelector = new SurrogateSelector();
 
+			surrogateSelector.AddSurrogate(
+				typeof(Order_Detail),
+				streamingContext, 
+				new OrderDetailSerializerSurrogate());
+			surrogateSelector.AddSurrogate(
+				typeof(Product),
+				streamingContext,
+				new ProductSerializerSurrogate());
+
+			var tester = new XmlDataContractSerializerTester<IEnumerable<Order_Detail>>(new NetDataContractSerializer(
+					streamingContext,
+					int.MaxValue,
+					true,
+					FormatterAssemblyStyle.Simple,
+					surrogateSelector
+				), true);
+
+			var orderDetails = dbContext.Order_Details.ToList();
 			tester.SerializeAndDeserialize(orderDetails);
 		}
 
@@ -62,7 +82,16 @@ namespace Task
 			dbContext.Configuration.ProxyCreationEnabled = true;
 			dbContext.Configuration.LazyLoadingEnabled = true;
 
-			var tester = new XmlDataContractSerializerTester<IEnumerable<Order>>(new DataContractSerializer(typeof(IEnumerable<Order>)), true);
+			var tester = new XmlDataContractSerializerTester<IEnumerable<Order>>(
+				new DataContractSerializer(typeof(IEnumerable<Order>), 
+					new DataContractSerializerSettings()
+					{
+						PreserveObjectReferences = true,
+						IgnoreExtensionDataObject = false,
+						MaxItemsInObjectGraph = int.MaxValue,
+						DataContractSurrogate = new OrderIDataContractSurrogate()
+					}), true);
+
 			var orders = dbContext.Orders.ToList();
 
 			tester.SerializeAndDeserialize(orders);

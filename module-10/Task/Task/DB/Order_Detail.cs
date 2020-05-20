@@ -1,11 +1,10 @@
 namespace Task.DB
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
+    [Serializable]
     [Table("Order Details")]
     public partial class Order_Detail
     {
